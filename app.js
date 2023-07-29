@@ -42,11 +42,13 @@ app.set("view engine", "ejs");
 
 // Respond with index file when a GET request is made to the homepage
 app.get("/", function (_req, res) {
+  console.log('hmmmmm index /GET coming through')
   res.render("index");
 });
 
 // Add support for GET requests to our webhook
 app.get("/webhook", (req, res) => {
+  console.log('hmmmmm webhook /GET coming through')
   // Parse the query params
   let mode = req.query["hub.mode"];
   let token = req.query["hub.verify_token"];
@@ -68,6 +70,7 @@ app.get("/webhook", (req, res) => {
 
 // Create the endpoint for your webhook
 app.post("/webhook", (req, res) => {
+  console.log('hmmmmm webhook /POST coming through')
   let body = req.body;
 
   console.log(`\u{1F7EA} Received webhook:`);
