@@ -1,15 +1,4 @@
-/**
- * Copyright 2021-present, Facebook, Inc. All rights reserved.
- *
- * This source code is licensed under the BSD-style license found in the
- * LICENSE file in the root directory of this source tree.
- *
- * Messenger For Original Coast Clothing
- * https://developers.facebook.com/docs/messenger-platform/getting-started/sample-apps/original-coast-clothing
- */
-
 "use strict";
-
 const Curation = require("./curation"),
   Order = require("./order"),
   Lead = require("./lead"),
@@ -24,9 +13,8 @@ module.exports = class Receive {
   constructor(user, webhookEvent, isUserRef) {
     this.user = user;
     this.webhookEvent = webhookEvent;
-    this.isUserRef = isUserRef;
+    this.isUserRef = isUserRef; // bool on if user is identified from a chatbot extension
   }
-
   // Check if the event is a message or postback and
   // call the appropriate handler function
   handleMessage() {
@@ -37,10 +25,9 @@ module.exports = class Receive {
     try {
       if (event.message) {
         let message = event.message;
-
         if (message.quick_reply) {
           responses = this.handleQuickReply();
-        } else if (message.attachments) {
+        } else if (message.attachments) { 
           responses = this.handleAttachmentMessage();
         } else if (message.text) {
           responses = this.handleTextMessage();
@@ -65,29 +52,24 @@ module.exports = class Receive {
     if (Array.isArray(responses)) {
       let delay = 0;
       for (let response of responses) {
-        this.sendMessage(response, delay * 2000, this.isUserRef);
+        this.sendMessage(response, delay * 1500, this.isUserRef);
         delay++;
       }
     } else {
       this.sendMessage(responses, this.isUserRef);
     }
   }
-
   // Handles messages events with text
   handleTextMessage() {
     console.log(
       "Received text:",
       `${this.webhookEvent.message.text} for ${this.user.psid}`
     );
-
     let event = this.webhookEvent;
-
     // check greeting is here and is confident
     let greeting = this.firstEntity(event.message.nlp, "greetings");
     let message = event.message.text.trim().toLowerCase();
-
     let response;
-
     if (
       (greeting && greeting.confidence > 0.8) ||
       message.includes("start over")
@@ -103,7 +85,7 @@ module.exports = class Receive {
     } else {
       response = [
         Response.genText(
-          i18n.__("fallback.any", {
+          i18n.__("fallback.any", { 
             message: event.message.text
           })
         ),
@@ -127,15 +109,12 @@ module.exports = class Receive {
 
     return response;
   }
-
   // Handles mesage events with attachments
   handleAttachmentMessage() {
     let response;
-
     // Get the attachment
     let attachment = this.webhookEvent.message.attachments[0];
     console.log("Received attachment:", `${attachment} for ${this.user.psid}`);
-
     response = Response.genQuickReply(i18n.__("fallback.attachment"), [
       {
         title: i18n.__("menu.help"),
@@ -146,18 +125,14 @@ module.exports = class Receive {
         payload: "GET_STARTED"
       }
     ]);
-
     return response;
   }
-
   // Handles mesage events with quick replies
   handleQuickReply() {
     // Get the payload of the quick reply
     let payload = this.webhookEvent.message.quick_reply.payload;
-
     return this.handlePayload(payload);
   }
-
   // Handles postbacks events
   handlePostback() {
     let postback = this.webhookEvent.postback;
@@ -173,10 +148,8 @@ module.exports = class Receive {
       console.log("Ignore postback with empty payload");
       return null;
     }
-
     return this.handlePayload(payload.toUpperCase());
   }
-
   // Handles referral events
   handleReferral() {
     // Get the payload of the postback
@@ -195,7 +168,6 @@ module.exports = class Receive {
     }
     console.log("Ignore referral of invalid type");
   }
-
   // Handles optins events
   handleOptIn() {
     let optin = this.webhookEvent.optin;
@@ -208,7 +180,6 @@ module.exports = class Receive {
     }
     return null;
   }
-
   handlePassThreadControlHandover() {
     let new_owner_app_id =
       this.webhookEvent.pass_thread_control.new_owner_app_id;
@@ -229,12 +200,9 @@ module.exports = class Receive {
     // We have thread control but no context on what to do, default to New User Experience
     return Response.genNuxMessage(this.user);
   }
-
   handlePayload(payload) {
     console.log("Received Payload:", `${payload} for ${this.user.psid}`);
-
     let response;
-
     // Set the response based on the payload
     if (
       payload === "GET_STARTED" ||
@@ -292,10 +260,8 @@ module.exports = class Receive {
         text: `This is a default postback message for payload: ${payload}!`
       };
     }
-
     return response;
   }
-
   handlePrivateReply(type, object_id) {
     let welcomeMessage =
       i18n.__("get_started.welcome") +
@@ -318,7 +284,6 @@ module.exports = class Receive {
         payload: "PRODUCT_LAUNCH"
       }
     ]);
-
     let requestBody = {
       recipient: {
         [type]: object_id
@@ -327,7 +292,6 @@ module.exports = class Receive {
     };
     GraphApi.callSendApi(requestBody);
   }
-
   sendMessage(response, delay = 0, isUserRef) {
     // Check if there is delay in the response
     if (response === undefined || response === null) {
@@ -355,7 +319,6 @@ module.exports = class Receive {
         message: response
       };
     }
-
     // Check if there is persona id in the response
     if ("persona_id" in response) {
       let persona_id = response["persona_id"];
@@ -382,10 +345,8 @@ module.exports = class Receive {
     // Mitigate restriction on Persona API
     // Persona API does not work for people in EU, until fixed is safer to not use
     delete requestBody["persona_id"];
-
     setTimeout(() => GraphApi.callSendApi(requestBody), delay);
   }
-
   sendRecurringMessage(notificationMessageToken, delay) {
     console.log("Received Recurring Message token");
     let requestBody = {},
@@ -404,13 +365,11 @@ module.exports = class Receive {
       },
       message: response
     };
-
     setTimeout(() => GraphApi.callSendApi(requestBody), delay);
   }
   firstEntity(nlp, name) {
     return nlp && nlp.entities && nlp.entities[name] && nlp.entities[name][0];
   }
-
   handleReportLeadSubmittedEvent() {
     let requestBody = {
       custom_events: [

@@ -9,38 +9,7 @@ const express = require("express"),
   User = require("./services/user"),
   config = require("./services/config"),
   i18n = require("./i18n.config"),
-  
-  
   app = express();
-  const axios = require('axios');
-
-  const { createClient } = require('@supabase/supabase-js')
-  // const { createStorage } = require('@supabase/storage-js')
-  const { uploadImage, upsertUser,  createSwipe, findMatch, findUserByIgId, supabaseAuthEmailOrPhone } = require("./services/supabase")
-  const tester = require('./services/tinder/tester');
-  const rampwin = require('./services/tinder/rampwin');
-  const swipe = require('./services/tinder/swipe');
-  const findmatch = require('./services/tinder/findmatch');
-  const manychat = require('./services/tinder/manychat');
-  const authEmailOrPhone = require('./services/tinder/authEmailOrPhone');
-  const manychatMatchNotification = require('./services/tinder/manychatMatchNotification');
-  
-  const getWebhook = require('./services/fbWebhooks/getWebhook');
-  const postWebhook = require('./services/fbWebhooks/postWebhook');
-  
-
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilioClient = require('twilio')(accountSid, authToken);
-
-
-
-const supabaseUrl = 'https://frzbawsadhmmltokvexj.supabase.co'
-// const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyemJhd3NhZGhtbWx0b2t2ZXhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg3MzgxMjcsImV4cCI6MTk5NDMxNDEyN30.KAHO-apaXL3G7mBTZ17r8GN0vXoOZIL7d_HzKr7hJjc'
- const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyemJhd3NhZGhtbWx0b2t2ZXhqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY3ODczODEyNywiZXhwIjoxOTk0MzE0MTI3fQ.wtwrDW0u4YblgL6dlkkf9rlPeBpcqprfE-eFi1KBYwk'
-const supabase = createClient(supabaseUrl, supabaseKey)
-const storage = supabase.storage
-
 var users = {};
 // Parse application/x-www-form-urlencoded
 app.use(
@@ -61,74 +30,130 @@ app.get("/", function (_req, res) {
 });
 // Add support for GET requests to our webhook
 app.get("/webhook", (req, res) => {
-  getWebhook(req, res, config)
-});
-
-
-function sendTwilioMessage(twilioClient, to_address, message) {
-  twilioClient.messages
-      .create({
-          body: message,
-          from: '+18662873230',
-          to: to_address? to_address : '+17738310785'
-      })
-      .then(message => console.log(message.sid));
-}
-
-
-app.post("/swipe", async (req, res) => {
-  swipe(req, res, supabase, createSwipe,sendTwilioMessage,twilioClient);
-});
-
-// instagram://direct?username=
-
-// http://instagram.com/_u/{{cuf_9711102}}/
-
-
-app.post("/findmatch", async (req, res) => {
-  findmatch(req, res, supabase, findMatch);
-});
-
-
-app.post("/rampwin", async (req, res) => {
-  rampwin(req,res)
-});
-
-app.post("/tester", async (req, res) => {
-  tester(req, res, supabase,findUserByIgId);
-});
-app.post("/manychat", (req, res) => {
-  manychat(req, res, supabase, upsertUser, uploadImage, storage);
-});
-app.post("/authEmailOrPhone", (req, res) => {
-  authEmailOrPhone(req, res,supabase, supabaseAuthEmailOrPhone)
-});
-app.post("/manychatMatchNotification", (req, res) => { 
-  manychatMatchNotification(req, res,supabase,axios)
-});
-
-
-
-app.post("/webhook", (req, res) => {
-  postWebhook(req, res,Receive,isGuestUser,User,users,GraphApi,i18n,setDefaultUser,receiveAndReturn);
-});
-
-function setDefaultUser(id) {
-  let user = new User(id);
-  users[id] = user;
-  i18n.setLocale("en_US");
-}
-function isGuestUser(webhookEvent) {
-  let guestUser = false;
-  if ("postback" in webhookEvent) {
-    if ("referral" in webhookEvent.postback) {
-      if ("is_guest_user" in webhookEvent.postback.referral) {
-        guestUser = true;
-      }
+  console.log('webhook /GET coming through')
+  // Parse the query params
+  let mode = req.query["hub.mode"];
+  let token = req.query["hub.verify_token"];
+  let challenge = req.query["hub.challenge"];
+  // Check if a token and mode is in the query string of the request
+  if (mode && token) {
+    // Check the mode and token sent is correct
+    if (mode === "subscribe" && token === config.verifyToken) {
+      // Respond with the challenge token from the request
+      console.log("WEBHOOK_VERIFIED");
+      res.status(200).send(challenge);
+    } else {
+      // Respond with '403 Forbidden' if verify tokens do not match
+      res.sendStatus(403);
     }
   }
-  return guestUser;
-}
+});
+// Create the endpoint for your webhook
+app.post("/webhook", (req, res) => {
+  console.log('webhook /POST coming through')
+  let body = req.body;
+  console.log(`\u{1F7EA} Received webhook:`);
+  // console.dir(body, { depth: null });
+  // Check if this is an event from a page subscription
+  if (body.object === "page") {
+    // Returns a '200 OK' response to all requests
+    res.status(200).send("EVENT_RECEIVED");
+    // Iterate over each entry - there may be multiple if batched
+    body.entry.forEach(async function (entry) {
+      if ("changes" in entry) {
+        // Handle Page Changes event
+        let receiveMessage = new Receive();
+        if (entry.changes[0].field === "feed") {
+          let change = entry.changes[0].value;
+          let [postId,postUrl] = [change.post_id,change.post.permalink_url];
+          console.log("a change was made to this post with id")
+          console.log(postId,postUrl);
+          console.dir(change, { depth: null });
+          console.log('entry:...')
+          console.dir(entry, { depth: null });
+          switch (change.entry) {
+            case "post":
+              return receiveMessage.handlePrivateReply(
+                "post_id",
+                change.post_id
+              );
+            case "comment":
+              return receiveMessage.handlePrivateReply(
+                "comment_id",
+                change.comment_id
+              );
+            default:
+              console.warn("Unsupported feed change type.");
+              return;
+          }
+        }
+      }
+      // Iterate over webhook events - there may be multiple
+      entry.messaging.forEach(async function (webhookEvent) {
+        if ("read" in webhookEvent) {
+          console.log("Got a read event");
+          return;
+        } else if ("delivery" in webhookEvent) {
+          console.log("Got a delivery event");
+          return;
+        } else if (webhookEvent.message && webhookEvent.message.is_echo) {
+          console.log(
+            "Got an echo of our send, mid = " + webhookEvent.message.mid
+          );
+          return;
+        }
+        // Get the sender PSID
+        let senderPsid = webhookEvent.sender.id;
+        console.log('senderPsid', senderPsid)
+        // Get the user_ref if from Chat plugin logged in user
+        if (senderPsid != null && senderPsid != undefined) {
+          if (!(senderPsid in users)) {
+              // Make call to UserProfile API only if user is not guest
+              let user = new User(senderPsid);
+              GraphApi.getUserProfile(senderPsid)
+                .then((userProfile) => {
+                  user.setProfile(userProfile);
+                })
+                .catch((error) => {
+                  // The profile is unavailable
+                  console.log(JSON.stringify(body));
+                  console.log("Profile is unavailable:", error);
+                })
+                .finally(() => {
+                  console.log("locale: " + user.locale);
+                  users[senderPsid] = user;
+                  i18n.setLocale("en_US");
+                  console.log(
+                    "New Profile PSID:",
+                    senderPsid,
+                    "with locale:",
+                    i18n.getLocale()
+                  );
+                  return receiveAndReturn(
+                    users[senderPsid],
+                    webhookEvent,
+                    false
+                  );
+                });
+          } else {
+            i18n.setLocale(users[senderPsid].locale);
+            console.log(
+              "Profile already exists PSID:",
+              senderPsid,
+              "with locale:",
+              i18n.getLocale()
+            );
+            return receiveAndReturn(users[senderPsid], webhookEvent, false);
+          }
+        } 
+      });
+    });
+  } else {
+    // Return a '404 Not Found' if event is not from a page subscription
+    res.sendStatus(404);
+  }
+});
+
 function receiveAndReturn(user, webhookEvent, isUserRef) {
   let receiveMessage = new Receive(user, webhookEvent, isUserRef);
   return receiveMessage.handleMessage();
