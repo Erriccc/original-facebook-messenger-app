@@ -60,6 +60,8 @@ function sendTwilioMessage(twilioClient, to_address, message) {
 // Respond with index file when a GET request is made to the homepage
 app.get("/", function (_req, res) {
   console.log('index /GET coming through')
+  res.render("index");
+
 });
 // Add support for GET requests to our webhook
 app.get("/webhook", (req, res) => {
