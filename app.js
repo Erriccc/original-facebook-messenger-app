@@ -13,6 +13,7 @@ const express = require("express"),
   const tester = require('./services/tinder/tester');
   const rampwin = require('./services/tinder/rampwin');
   const swipe = require('./services/tinder/swipe');
+  const tynidm = require('./services/tynibot/tynidm');
   const findmatch = require('./services/tinder/findmatch');
   const manychat = require('./services/tinder/manychat');
   const authEmailOrPhone = require('./services/tinder/authEmailOrPhone');
@@ -73,6 +74,12 @@ app.get("/webhook", (req, res) => {
 app.post("/swipe", async (req, res) => {
   swipe(req, res, supabase, createSwipe,sendTwilioMessage,twilioClient);
 });
+
+
+app.post("/tynidm", async (req, res) => {
+  tynidm(req, res);
+});
+
 
 // instagram://direct?username=
 
