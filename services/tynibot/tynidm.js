@@ -1,7 +1,11 @@
 const tynidm = async (req, res) => {
    
   
-    const { ig_id,id,ig_username,first_name } = req.body;
+    const { first_name } = req.body;
+
+    console.log('gothere')
+    console.log('first_name',first_name)
+    console.log('first_name',typeof first_name)
     
   
 
