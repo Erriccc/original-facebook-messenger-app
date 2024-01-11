@@ -1,13 +1,20 @@
 const tynidm = async (req, res) => {
    
   
-    const { first_name } = req.body;
+    const { first_name,id } = req.body;
+
+    console.log('gothere..')
+    console.log('first_name',id)
+    console.log('first_name',typeof id)
+
 
     console.log('gothere..')
     console.log('first_name',first_name)
     console.log('first_name',typeof first_name)
     
   
+    // toString()
+    // const string4 = new String("A String object");
 
 
 
