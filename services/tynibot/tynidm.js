@@ -82,7 +82,8 @@ const tynidm = async (req, res) => {
     }
 
     query({
-        "question": "Hey, how are you?",
+        "question": "Hey, how are you?"
+        // "question": "Hey, how are you?",
         // "overrideConfig": {
         //     "sessionId": id
         // }
