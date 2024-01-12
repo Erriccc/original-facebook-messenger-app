@@ -144,6 +144,7 @@ const tynidm = async (req, res) => {
           - yoo do you need help coming up with a plan to reach your goals ?
           - ik you Wanna be able to work from home so u can spend more time with my kids
           - yoo, im curious what type of business you got ?
+          - i was still working on my page when you commented. this is part of the tips i share on my books
 
         Previous conversation:
       {history}
