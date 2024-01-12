@@ -1,4 +1,7 @@
 const axios = require('axios');
+const {ChatOpenAI} = require("@langchain/openai");
+const {ConversationChain} = require("langchain/chains");
+const {ZepMemory} = require("@langchain/community/memory/zep");
 
 const tynidm = async (req, res) => {
    
@@ -8,47 +11,32 @@ const tynidm = async (req, res) => {
     console.log('gothere..')
     console.log('first_name',id)
     console.log('first_name',typeof id)
-
-
-    console.log('gothere..')
-    console.log('first_name',first_name)
-    console.log('first_name',typeof first_name)
     
-  
-    // toString()
-    // const string4 = new String("A String object");
+  const sessionId = first_name
+  const zepURL = "https://mintchi-zep.up.railway.app";
 
-
-
-    async function query(data) {
-      console.log('boutta make api call.')
-      const response = await fetch(
-          "https://mintchi-flowiseai.up.railway.app/api/v1/prediction/fff2194a-bfd8-4fe9-9d16-69a6f0ea9b57",
-          {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json"
-              },
-              body: JSON.stringify(data)
-          }
-      );
-      console.log('got a responce')
-      console.log('got a responce without json', response)
-      console.log('got a responce.json()', await response.json())
-      const result = await response.json();
-      return result;
-  }
-  
-  await query({
-    // "question": "Hey, how are you?","overrideConfig": {"sessionId": `${first_name}`}}).then((response) => {
-      "question": "Hey, how are you?","overrideConfig": {"sessionId": "9ca20f60-6336-4b7d-bcc4pppp"}}).then((response) => {
-      console.log(response);
-    res.status(200).json({yoo:'yooooo', response});
-
+  const memory = new ZepMemory({
+    sessionId,
+    baseURL: zepURL,
+    // This is optional. If you've enabled JWT authentication on your Zep server, you can
+    // pass it in here. See https://docs.getzep.com/deployment/auth
+    apiKey: "change_this_key",
   });
+  
+  const model = new ChatOpenAI({
+    modelName: "gpt-3.5-turbo",
+    temperature: 0,
+    openAIApiKey: process.envOPEN_AI_API_KEY
+  });
+  
 
+  const chain = new ConversationChain({ llm: model, memory });
+console.log("Memory Keys:", memory.memoryKeys);
 
-    // res.status(200).json({yoo:'yooooo'});
+const res1 = await chain.call({ input: "Hi! I'm Jim." });
+console.log('res1 is the response from gpt',{ res1 });
+
+    res.status(200).json({yoo:'yooooo'});
   };
   
   module.exports = tynidm;

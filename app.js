@@ -19,9 +19,9 @@ const express = require("express"),
   const authEmailOrPhone = require('./services/tinder/authEmailOrPhone');
   const manychatMatchNotification = require('./services/tinder/manychatMatchNotification');
   
-  const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const twilioClient = require('twilio')(accountSid, authToken);
+  // const accountSid = process.env.TWILIO_ACCOUNT_SID;
+// const authToken = process.env.TWILIO_AUTH_TOKEN;
+// const twilioClient = require('twilio')(accountSid, authToken);
 
 
 
@@ -47,13 +47,14 @@ app.set("view engine", "ejs");
 
 
 function sendTwilioMessage(twilioClient, to_address, message) {
-  twilioClient.messages
-      .create({
-          body: message,
-          from: '+18662873230',
-          to: to_address? to_address : '+17738310785'
-      })
-      .then(message => console.log(message.sid));
+  // twilioClient.messages
+  //     .create({
+  //         body: message,
+  //         from: '+18662873230',
+  //         to: to_address? to_address : '+17738310785'
+  //     })
+  //     .then(message => console.log(message.sid));
+  console.log('sent twillio message')
 }
 
 
