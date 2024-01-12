@@ -21,6 +21,7 @@ const tynidm = async (req, res) => {
 
 
     async function query(data) {
+      console.log('boutta make api call.')
       const response = await fetch(
           "https://mintchi-flowiseai.up.railway.app/api/v1/prediction/fff2194a-bfd8-4fe9-9d16-69a6f0ea9b57",
           {
@@ -31,6 +32,7 @@ const tynidm = async (req, res) => {
               body: JSON.stringify(data)
           }
       );
+      console.log('got a responce')
       const result = await response.json();
       return result;
   }
