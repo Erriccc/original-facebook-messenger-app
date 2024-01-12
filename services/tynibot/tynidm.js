@@ -158,7 +158,7 @@ let defaultDmMessage = `hey my name is ${first_name} `
 
 // const gptResponse = await chain.call({ input: `${last_input_text ? last_input_text : defaultDmMessage}` });
 // console.log('res1 is the response from gpt',{ gptResponse });
-const llmresponse = await conversationChain.invoke({ question: `${last_input_text ? [last_input_text, ig_last_interaction] : defaultDmMessage}` });
+const llmresponse = await conversationChain.invoke({ question: `${last_input_text ? [last_input_text,' dm timestamp:   ', ig_last_interaction] : defaultDmMessage}` });
 console.log(llmresponse)
     res.status(200).json({gptResponse:llmresponse});
   };
