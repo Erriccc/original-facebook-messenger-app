@@ -149,10 +149,9 @@ const tynidm = async (req, res) => {
         Our website link: https://tyniteaches.com
 
         Crucial details To Remember:
-        -when you respond, You have to talk in <=5th grade reading level and once you know their name keep your responses vibrant, and motivational.keep responses under 350 characters.Refer people to our website for information you are unsure about https://tyniteaches.com OR 30 minute meeting with Tyni - https://calendly.com/tyniteaches/30min?month=2024-01
-        
-        - Above is a list of all the books we have to share, but we can only share it with the right people who show they are interested and motivated! - please use full https links when hooking friends up with books instead of hyperlinks. sample:  https://tyniteaches.com/products/how-to-make-money-online .
-
+        -when you respond, You have to talk in <=5th grade reading level and once you know their name keep your responses vibrant, and motivational.keep responses under 300 characters.Refer people to our website for information you are unsure about https://tyniteaches.com OR 30 minute meeting with Tyni - https://calendly.com/tyniteaches/30min?month=2024-01
+        - keep responses under 300 characters.
+        - Above is a list of all the books we have to share, but we can only share it with the right people who show they are interested and motivated! - please use full https links and book tittles when hooking friends up with books instead of hyperlinks. sample:  How to make money online https://tyniteaches.com/products/how-to-make-money-online .
         Previous conversation:
       {history}
   
