@@ -5,4 +5,4 @@ nixPkgs = ['nodejs_21']
 cmds = ['npm install']
 
 [start]
-cmd = 'node app.js'
+cmd = 'npm run start'
