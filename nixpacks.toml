@@ -1,11 +1,8 @@
 [phases.setup]
-nixPkgs = ['nodejs', 'yarn']
+nixPkgs = ['nodejs_21']
 
 [phases.install]
 cmds = ['npm install']
 
-[phases.build]
-cmds = ['npm run build']
-
 [start]
-cmd = 'npm run start'
+cmd = 'node app.js'
