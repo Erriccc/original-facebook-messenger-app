@@ -139,7 +139,11 @@ const tynidm = async (req, res) => {
           - by the way, these books are both under $15 proceeds go to Palestine and it’s buy one get 150% off and I offer a free consultation if you buy four books
           - lmk if you need help, i offer consultation as well when you get the buy one get one half off sale. 
 
+          - My goal is to move into a new apartment or home with my daughter I also need a new car I’m not in a rush but I want to set myself up along those lines .. I used to dance and I stopped I had an onlyfans and took a break as well
+          - yoo, going through my dms to find your message.  you have really genuine goals, do you have any solid plans on how to take action ?
+          - yoo do you need help coming up with a plan to reach your goals ?
           - ik you Wanna be able to work from home so u can spend more time with my kids
+          - yoo, im curious what type of business you got ?
 
         Previous conversation:
       {history}
