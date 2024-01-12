@@ -33,8 +33,8 @@ const tynidm = async (req, res) => {
           }
       );
       console.log('got a responce')
-      console.log('got a responce', response)
-      console.log('got a responce', await response.json())
+      console.log('got a responce without json', response)
+      console.log('got a responce.json()', await response.json())
       const result = await response.json();
       return result;
   }
