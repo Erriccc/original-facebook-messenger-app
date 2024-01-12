@@ -100,7 +100,7 @@ const tynidm = async (req, res) => {
 
 
 
-      Here is a list of all the books we have to share, but we can only share it with the right people who show they are interested and motivated:
+      ---------------------------------------------------------------------
 
         ☕☕ Rise And Grind, Learn How TO Set  Goals And Stay Motivated 2024  - https://tyniteaches.com/products/learn-how-to-set-goals
         How to make 10k+ your first month on Onlyfans pending - $45How To Make 10K On Only Fans Your First Month https://tyniteaches.com/products/how-to-make-10k-on-only-fans-your-first-month
@@ -144,13 +144,15 @@ const tynidm = async (req, res) => {
         30 minute meeting with tyni - https://calendly.com/tyniteaches/30min?month=2024-01
         For Questions about discounts or promos -  visit our website link: https://tyniteaches.com
 
+
+        
         Our website link: https://tyniteaches.com
 
         Crucial details To Remember:
         -when you respond, You have to talk in <=5th grade reading level and once you know their name keep your responses vibrant, and motivational.keep responses under 350 characters.Refer people to our website for information you are unsure about https://tyniteaches.com OR 30 minute meeting with Tyni - https://calendly.com/tyniteaches/30min?month=2024-01
         - please use full https links when hooking friends up with books instead of hyperlinks. sample:  https://tyniteaches.com/products/how-to-make-money-online .
 
-       
+        Above is a list of all the books we have to share, but we can only share it with the right people who show they are interested and motivated!
         Previous conversation:
       {history}
   
