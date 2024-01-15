@@ -14,6 +14,8 @@ const express = require("express"),
   const rampwin = require('./services/tinder/rampwin');
   const swipe = require('./services/tinder/swipe');
   const tynidm = require('./services/tynibot/tynidm');
+  const sendpulsewebhook = require('./services/sendpulsebot/sendpulsewebhook');
+  
   const findmatch = require('./services/tinder/findmatch');
   const manychat = require('./services/tinder/manychat');
   const authEmailOrPhone = require('./services/tinder/authEmailOrPhone');
@@ -81,6 +83,9 @@ app.post("/tynidm", async (req, res) => {
   tynidm(req, res);
 });
 
+app.post("/sendpulsewebhook", async (req, res) => {
+  sendpulsewebhook(req, res);
+});
 
 // instagram://direct?username=
 
