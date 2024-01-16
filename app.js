@@ -27,8 +27,12 @@ const express = require("express"),
 // const twilioClient = require('twilio')(accountSid, authToken);
 
 
-const supabaseUrl = process.env.SUPABASE_URL
- const supabaseKey = process.env.SUPABASE_KEY
+// const supabaseUrl = process.env.SUPABASE_URL
+//  const supabaseKey = process.env.SUPABASE_KEY
+
+const supabaseUrl = 'https://frzbawsadhmmltokvexj.supabase.co'
+ const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyemJhd3NhZGhtbWx0b2t2ZXhqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY3ODczODEyNywiZXhwIjoxOTk0MzE0MTI3fQ.wtwrDW0u4YblgL6dlkkf9rlPeBpcqprfE-eFi1KBYwk'
+
 const supabase = createClient(supabaseUrl, supabaseKey)
 const storage = supabase.storage
 
