@@ -2,10 +2,16 @@ const axios = require('axios');
 const {ChatOpenAI} = require("@langchain/openai");
 const {PromptTemplate} = require("@langchain/core/prompts");
 const {ConversationChain, LLMChain} = require("langchain/chains");
-
+const { BufferMemory } = require("langchain/memory");
+// const { UpstashRedisChatMessageHistory } = require("@langchain/community/stores/message/upstash_redis");
 const {ZepMemory} = require("@langchain/community/memory/zep");
 
-const tynidm = async (req, res) => {
+
+const tynidm = async (redis,req, res) => {
+  console.log('this is redis..............')
+  // console.log(req.body)
+const {UpstashRedisChatMessageHistory} = await import("@langchain/community/stores/message/upstash_redis");
+
     const { first_name,id, last_input_text, page_id, ig_last_interaction } = req.body;
 
     console.log('gothere..')
@@ -169,11 +175,23 @@ const tynidm = async (req, res) => {
       memoryKeys: "history"
     });
 
+    const upStashMemory = new BufferMemory({
+      chatHistory: new UpstashRedisChatMessageHistory({
+        sessionId: sessionId,
+        // sessionTTL: 300, // 5 minutes, omit this parameter to make sessions never expire
+        // config: {
+        //   url: process.env.UPSTASH_URL,
+        //   token: process.env.UPSTASH_TOKEN, 
+        // },
+        client:await redis()
+      }),
+    });
     const conversationChain = new LLMChain({
       llm:model,
       prompt,
       verbose: false,
-      memory,
+      // memory,
+      memory:upStashMemory
     });
 
 //   const chain = new ConversationChain({ llm: model,prompt, memory });

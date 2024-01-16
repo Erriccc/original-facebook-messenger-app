@@ -33,7 +33,7 @@ const axios = require('axios');
 const sendPluseClientId = process.env.SEND_PULSE_CLIENT_ID;
 const sendPulseClientSecret = process.env.SEND_PULSE_CLIENT_SECRET;
 
-const sendpulsewebhook = async (req, res) => {
+const sendpulsewebhook = async (redis,req, res) => {
 
   const payload = req.body[0];
 
@@ -48,6 +48,43 @@ const sendpulsewebhook = async (req, res) => {
   // Sender details
   const contactId = payload.contact.id; 
   const contactName = payload.contact.name;
+
+
+  const getContact = async (contactsId) => {
+
+    const getAccessToken = async () => {
+      const response = await axios.post('https://api.sendpulse.com/oauth/access_token', {
+        grant_type: 'client_credentials',
+        client_id: sendPluseClientId,
+        client_secret: sendPulseClientSecret
+      });
+    
+      return response.data.access_token; 
+    }
+
+    const accessToken = await getAccessToken();
+    try {
+      const response = await axios.get(`https://api.sendpulse.com/instagram/contacts/get?id=${contactsId}`, {
+        headers: {
+          Authorization: `Bearer ${accessToken}`   
+        }
+      });
+  
+      const channelData = response.data.data.channel_data;
+  
+      console.log('-------------------------------------------------------------------------------------')
+      console.log("channelData :", channelData)
+  
+      return channelData;
+  
+    } catch (error) {
+      console.log(error);
+    }
+  
+  }
+  
+  const contactsChannelData = await getContact(contactId);
+
 
   // Message details
   const messageId = payload.info.message.id;
@@ -80,8 +117,15 @@ const sendpulsewebhook = async (req, res) => {
       name: botName  
     },
     contact: {
-      id: contactId,
-      name: contactName
+      sendPulseId: contactId,
+      name: contactName,
+      channelId: contactsChannelData.id,
+      channelUserName: contactsChannelData.user_name,
+      is_verified_user: contactsChannelData.is_verified_user,
+      follower_count: contactsChannelData.follower_count,
+      is_user_follow_business: contactsChannelData.is_user_follow_business,
+      is_business_follow_user: contactsChannelData.is_business_follow_user
+
     },
     id: messageId,   
     type: messageType,
@@ -99,42 +143,6 @@ const sendpulsewebhook = async (req, res) => {
   };
 
 
-  const getContact = async (contactsId) => {
-
-    const getAccessToken = async () => {
-      const response = await axios.post('https://api.sendpulse.com/oauth/access_token', {
-        grant_type: 'client_credentials',
-        client_id: sendPluseClientId,
-        client_secret: sendPulseClientSecret  
-      });
-    
-      return response.data.access_token; 
-    }
-
-    const accessToken = await getAccessToken();
-    try {
-      const response = await axios.get(`https://api.sendpulse.com/instagram/contacts/get?id=${contactsId}`, {
-        headers: {
-          Authorization: `Bearer ${accessToken}`   
-        }
-      });
-  
-      const channelData = response.data.data.channel_data;
-  
-      console.log(channelData);
-              
-      console.log('-------------------------------------------------------------------------------------')
-      console.log("channelData :", channelData)
-  
-      return channelData;
-  
-    } catch (error) {
-      console.log(error);
-    }
-  
-  }
-  
-  await getContact(contactId);
       
   console.log('-------------------------------------------------------------------------------------')
   // console.log(req.body)
@@ -148,9 +156,6 @@ const sendpulsewebhook = async (req, res) => {
       console.log('-------------------------------------------------------------------------------------')
     console.log('---------------- the message sendPulseReqBody.info.message: ', sendPulseReqBody.info.message)
     console.log('-------------------------------------------------------------------------------------')
-
-    console.log('---------------- the message sendPulseReqBody.info.message.channel_data.message.media: ', sendPulseReqBody.info.message.channel_data.message.media ? sendPulseReqBody.info.message.channel_data.message.media : 'not a reply')
-    console.log('---------------- the message sendPulseReqBody.info.message.channel_data.message.from: ', sendPulseReqBody.info.message.channel_data.message.from ? sendPulseReqBody.info.message.channel_data.message.from : 'not a reply')
 
 
   res.status(200).json({gptResponse:'llmresponse'});

@@ -6,8 +6,9 @@ const express = require("express"),
   config = require("./services/config"),
   app = express();
   const axios = require('axios');
-
   const { createClient } = require('@supabase/supabase-js')
+  const {redis} = require('./redis.js')
+
   // const { createStorage } = require('@supabase/storage-js')
   const { uploadImage, upsertUser,  createSwipe, findMatch, findUserByIgId, supabaseAuthEmailOrPhone } = require("./services/supabase")
   const tester = require('./services/tinder/tester');
@@ -26,10 +27,8 @@ const express = require("express"),
 // const twilioClient = require('twilio')(accountSid, authToken);
 
 
-
-const supabaseUrl = 'https://frzbawsadhmmltokvexj.supabase.co'
-// const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyemJhd3NhZGhtbWx0b2t2ZXhqIiwicm9sZSI6ImFub24iLCJpYXQiOjE2Nzg3MzgxMjcsImV4cCI6MTk5NDMxNDEyN30.KAHO-apaXL3G7mBTZ17r8GN0vXoOZIL7d_HzKr7hJjc'
- const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyemJhd3NhZGhtbWx0b2t2ZXhqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTY3ODczODEyNywiZXhwIjoxOTk0MzE0MTI3fQ.wtwrDW0u4YblgL6dlkkf9rlPeBpcqprfE-eFi1KBYwk'
+const supabaseUrl = process.env.SUPABASE_URL
+ const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
 const storage = supabase.storage
 
@@ -78,13 +77,12 @@ app.post("/swipe", async (req, res) => {
   swipe(req, res, supabase, createSwipe,sendTwilioMessage,twilioClient);
 });
 
-
 app.post("/tynidm", async (req, res) => {
-  tynidm(req, res);
+  tynidm(createClient,req, res);
 });
 
 app.post("/sendpulsewebhook", async (req, res) => {
-  sendpulsewebhook(req, res);
+  sendpulsewebhook(createClient,req, res);
 });
 
 // instagram://direct?username=
