@@ -1,15 +1,11 @@
 const axios = require('axios');
 const {ChatOpenAI} = require("@langchain/openai");
 const {PromptTemplate} = require("@langchain/core/prompts");
-const {ConversationChain, LLMChain} = require("langchain/chains");
+const {LLMChain} = require("langchain/chains");
 const { BufferMemory } = require("langchain/memory");
-// const { UpstashRedisChatMessageHistory } = require("@langchain/community/stores/message/upstash_redis");
-const {ZepMemory} = require("@langchain/community/memory/zep");
-
 
 const tynidm = async (redis,req, res) => {
-  console.log('this is redis..............')
-  // console.log(req.body)
+
 const {UpstashRedisChatMessageHistory} = await import("@langchain/community/stores/message/upstash_redis");
 
     const { first_name,id, last_input_text, page_id, ig_last_interaction } = req.body;
@@ -19,7 +15,6 @@ const {UpstashRedisChatMessageHistory} = await import("@langchain/community/stor
     console.log('first_name',typeof id)
     // console.log(req.body)
     
-  // const sessionId = page_id? page_id : first_name
   const sessionId = first_name
   const zepURL = "https://mintchi-zep.up.railway.app";
 
@@ -166,23 +161,12 @@ const {UpstashRedisChatMessageHistory} = await import("@langchain/community/stor
     Response:`;
 
     const prompt = PromptTemplate.fromTemplate(template);
-    const memory = new ZepMemory({
-      sessionId,
-      baseURL: zepURL,
-      // This is optional. If you've enabled JWT authentication on your Zep server, you can
-      // pass it in here. See https://docs.getzep.com/deployment/auth
-      apiKey: "change_this_key",
-      memoryKeys: "history"
-    });
-
+    
     const upStashMemory = new BufferMemory({
       chatHistory: new UpstashRedisChatMessageHistory({
         sessionId: sessionId,
         // sessionTTL: 300, // 5 minutes, omit this parameter to make sessions never expire
-        // config: {
-        //   url: process.env.UPSTASH_URL,
-        //   token: process.env.UPSTASH_TOKEN, 
-        // },
+        memoryKey: "history",
         client:await redis()
       }),
     });
@@ -190,16 +174,10 @@ const {UpstashRedisChatMessageHistory} = await import("@langchain/community/stor
       llm:model,
       prompt,
       verbose: false,
-      // memory,
-      memory:upStashMemory
+      memory: upStashMemory
     });
 
-//   const chain = new ConversationChain({ llm: model,prompt, memory });
-// console.log("Memory Keys:", memory.memoryKeys);
 let defaultDmMessage = `hey my name is ${first_name} `
-
-// const gptResponse = await chain.call({ input: `${last_input_text ? last_input_text : defaultDmMessage}` });
-// console.log('res1 is the response from gpt',{ gptResponse });
 const llmresponse = await conversationChain.invoke({ question: `${last_input_text ? [last_input_text,' dm timestamp:   ', ig_last_interaction] : defaultDmMessage}` });
 console.log(llmresponse)
     res.status(200).json({gptResponse:llmresponse});
