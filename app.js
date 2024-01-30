@@ -16,6 +16,9 @@ const express = require("express"),
   const swipe = require('./services/tinder/swipe');
   const tynidm = require('./services/tynibot/tynidm');
   const sendpulsewebhook = require('./services/sendpulsebot/sendpulsewebhook');
+  const fourpics1word = require('./services/sendpulsebot/fourpics1word');
+  const mathPicSolver = require('./services/sendpulsebot/mathPicSolver');
+  
   
   const findmatch = require('./services/tinder/findmatch');
   const manychat = require('./services/tinder/manychat');
@@ -84,6 +87,16 @@ app.post("/tynidm", async (req, res) => {
 app.post("/sendpulsewebhook", async (req, res) => {
   sendpulsewebhook(redisClient,req, res);
 });
+
+
+app.post("/fourpics1word", async (req, res) => {
+  fourpics1word(redisClient,req, res);
+});
+
+app.post("/mathPicSolver", async (req, res) => {
+  mathPicSolver(redisClient,req, res);
+});
+
 
 // instagram://direct?username=
 

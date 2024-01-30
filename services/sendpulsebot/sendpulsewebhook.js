@@ -1,33 +1,3 @@
-// const axios = require('axios');
-// const sendpulsewebhook = async (req, res) => {
-   
-      
-//   console.log('-------------------------------------------------------------------------------------')
-//   // console.log(req.body)
-//   const sendPulseReqBody = req.body[0]
-//   console.log('---------------- the message: req ', sendPulseReqBody)
-
-//   console.log('-------------------------------------------------------------------------------------')
-//   console.log('---------------- the message req.info: ', sendPulseReqBody.info)
-
-//   console.log('-------------------------------------------------------------------------------------')
-//   console.log('---------------- the message req.message: ', sendPulseReqBody.info.message)
-
-//   console.log('-------------------------------------------------------------------------------------')
-//   console.log('---------------- the message req.info.message.channel_data: ', sendPulseReqBody.info.message.channel_data)
-//   console.log('-------------------------------------------------------------------------------------')
-//   console.log('---------------- the message req.info.message.channel_data.message.attachments: ', sendPulseReqBody.info.message.channel_data.message.attachments)
-
-//   console.log('-------------------------------------------------------------------------------------')
-//   console.log('---------------- the message req.info.message.channel_data.message.attachments.type: ', sendPulseReqBody.info.message.channel_data.message.attachments.type)
-
-
-
-//        res.status(200).json({gptResponse:'llmresponse'});
-//   };
-  
-//   module.exports = sendpulsewebhook;
-  
 const axios = require('axios');
 
 const sendPluseClientId = process.env.SEND_PULSE_CLIENT_ID;
