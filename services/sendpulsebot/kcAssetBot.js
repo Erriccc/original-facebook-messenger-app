@@ -23,11 +23,13 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
         // confirm ther is an attachment and the attachment is an image
         if (message.attachmentType && message.attachmentType == 'image'){
             
+            let imageUrl = getAttachmentUrl(message)
+            // {{$['imageUrl']}}"
         // const aiSolution = await gptVissionWrraper('https://www.scriptbyai.com/wp-content/uploads/2023/09/MathGPTPro-AI-math-solver-upload-image.webp', `You are a problem solving expert, can you solve the problem in the image above while showing step by step solutions?`)
-        const aiSolution = await gptVissionWrraper(getAttachmentUrl(message), `You are a problem solving expert, in less than 500 characters can you solve the problem in the image above while showing major reasoning steps to solutions?`)
+        const aiSolution = await gptVissionWrraper(imageUrl, `You are a problem solving expert, in less than 500 characters can you solve the problem in the image above while showing major reasoning steps to solutions?`)
          console.log('processing done, sending message')
         
-        messenger.sendFlowToContact(sendPulseContactId,flowId,{aiSolution})
+        messenger.sendFlowToContact(sendPulseContactId,flowId,{aiSolution,imageUrl})
         console.log('message sent!')
 
         }
