@@ -27,7 +27,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
         const aiSolution = await gptVissionWrraper(getAttachmentUrl(message), `You are a problem solving expert, in less than 500 characters can you solve the problem in the image above while showing major reasoning steps to solutions?`)
          console.log('processing done, sending message')
         
-        messenger.sendFlowToContact(sendPulseContactId,flowId,{testData: aiSolution})
+        messenger.sendFlowToContact(sendPulseContactId,flowId,{aiSolution})
         console.log('message sent!')
 
         }
