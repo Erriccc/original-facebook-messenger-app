@@ -2,6 +2,8 @@ const axios = require('axios');
 const {ChatOpenAI} = require("@langchain/openai");
 const {PromptTemplate} = require("@langchain/core/prompts");
 const { HumanMessage,SystemMessage,AIMessage } = require("@langchain/core/messages");
+const { StringOutputParser } = require("@langchain/core/output_parsers");
+const {RunnableLambda,RunnableMap,RunnablePassthrough,RunnableSequence} = require ("@langchain/core/runnables");
 const {LLMChain} = require("langchain/chains");
 const { BufferMemory } = require("langchain/memory");
 
@@ -46,7 +48,6 @@ const template = `Yoo u are Tyni, an experienced problem solver`;
 
 const prompt = PromptTemplate.fromTemplate(template);
 
-
 const upStashMemory = new BufferMemory({
   chatHistory: new UpstashRedisChatMessageHistory({
     sessionId: req.body.name,
@@ -62,11 +63,19 @@ const conversationChain = new LLMChain({
   memory: upStashMemory
 });
 
+
 console.log('yooooo...')
-  const res2 = await model.invoke([ImageMessagetemplate]);
+
+const stringParser = new StringOutputParser();
+
+const chain = RunnableSequence.from([model,stringParser])
+  const aiStringResponse = await chain.invoke([ImageMessagetemplate]);
+  console.log('aiStringResponse===========================================================================res2');
+  console.log( aiStringResponse )
+  // const res2 = await model.invoke([ImageMessagetemplate]);
   console.log('res2===========================================================================res2');
-  console.log( res2 )
-  console.log( res2.content )
+  // console.log( res2.content )
+  
 //   const payload = req.body[0];
 
 //   // Bot details
@@ -177,7 +186,7 @@ console.log('yooooo...')
 
 
   res.status(200).json([
-    {fourpics:res2.content},
+    {fourpics:aiStringResponse},
     // {fourpics:'4pics1word2'},
     // {fourpics:'4pics1word3'},
     // {fourpics:'4pics1word4'},

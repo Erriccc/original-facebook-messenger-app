@@ -1,4 +1,5 @@
 const axios = require('axios');
+const {kcAssetBot} = require('./kcAssetBot');
 
 const sendPluseClientId = process.env.SEND_PULSE_CLIENT_ID;
 const sendPulseClientSecret = process.env.SEND_PULSE_CLIENT_SECRET;
@@ -20,37 +21,33 @@ const sendpulsewebhook = async (redis,req, res) => {
   const contactName = payload.contact.name;
 
 
+  const getAccessToken = async () => {
+    const response = await axios.post('https://api.sendpulse.com/oauth/access_token', {
+      grant_type: 'client_credentials',
+      client_id: sendPluseClientId,
+      client_secret: sendPulseClientSecret
+    });
+  
+    return response.data.access_token; 
+  }
+
+  const accessToken = await getAccessToken();
+
+
   const getContact = async (contactsId) => {
-
-    const getAccessToken = async () => {
-      const response = await axios.post('https://api.sendpulse.com/oauth/access_token', {
-        grant_type: 'client_credentials',
-        client_id: sendPluseClientId,
-        client_secret: sendPulseClientSecret
-      });
-    
-      return response.data.access_token; 
-    }
-
-    const accessToken = await getAccessToken();
     try {
       const response = await axios.get(`https://api.sendpulse.com/instagram/contacts/get?id=${contactsId}`, {
         headers: {
           Authorization: `Bearer ${accessToken}`   
         }
       });
-  
       const channelData = response.data.data.channel_data;
-  
       console.log('-------------------------------------------------------------------------------------')
       console.log("channelData :", channelData)
-  
       return channelData;
-  
     } catch (error) {
       console.log(error);
     }
-  
   }
   
   const contactsChannelData = await getContact(contactId);
@@ -120,11 +117,22 @@ const sendpulsewebhook = async (redis,req, res) => {
   // Rest of the code...
   console.log("message :", message)
 
+  const botIds = {
+    kcAssetsIgBot: '65a566d55041e08ef9006ce5',
+  }
+
+  if (message.bot.id == botIds.kcAssetsIgBot){
+    // media message has been received, handle the message type, then determine the use case of the media, then send follow up based on the usecase
+  
+  
+    await kcAssetBot(message, accessToken)
+  }
+
      
   const sendPulseReqBody = req.body[0]
-  console.log('---------------- the message: req ', sendPulseReqBody)
+  // console.log('---------------- the message: req ', sendPulseReqBody)
       console.log('-------------------------------------------------------------------------------------')
-    console.log('---------------- the message sendPulseReqBody.info.message: ', sendPulseReqBody.info.message)
+    // console.log('---------------- the message sendPulseReqBody.info.message: ', sendPulseReqBody.info.message)
     console.log('-------------------------------------------------------------------------------------')
 
 
