@@ -112,7 +112,22 @@ class Messenger {
      }
     };
   }
-
+  async sendFlowToContact(contactId, flowId, data) {
+    try {
+      const response = await axios.post('https://api.sendpulse.com/instagram/flows/run', {
+        contact_id: contactId,
+        flow_id: flowId,
+        external_data: data
+      }, 
+        {
+          headers: {
+            Authorization: `Bearer ${this.sendPulseAccessToken}`  
+          }
+        });
+    } catch(error) {
+      console.error(error);
+    }
+  }
 
   async sendPulseMessage(contactId, message) {
 
@@ -148,7 +163,7 @@ class Messenger {
 
     // const messenger = new Messenger(fbAccessToken, pageId, sendPulseAccessToken);
 
-    
+    // messenger.sendFlowToContact(sendPulseContactId,flowID,{data:'data is optional and can be empty'})
     // messenger.sendFbMessage(IGId, {
     //     type: 'text',
     //     text: 'Hello World!',

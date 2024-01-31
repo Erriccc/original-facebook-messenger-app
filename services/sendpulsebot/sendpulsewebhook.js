@@ -7,6 +7,7 @@ const sendPulseClientSecret = process.env.SEND_PULSE_CLIENT_SECRET;
 const sendpulsewebhook = async (redis,req, res) => {
 
   const payload = req.body[0];
+  const sendPulseReqBody = req.body[0]
 
   // Bot details
   const botId = payload.bot.id;
@@ -19,6 +20,7 @@ const sendpulsewebhook = async (redis,req, res) => {
   // Sender details
   const contactId = payload.contact.id; 
   const contactName = payload.contact.name;
+  const userVariables = payload.contact.variables
 
 
   const getAccessToken = async () => {
@@ -106,7 +108,8 @@ const sendpulsewebhook = async (redis,req, res) => {
     attachment: {
       type: attachmentType,
       url: attachmentUrl
-    }
+    },
+    userVariables
   };
 
 
@@ -129,10 +132,11 @@ const sendpulsewebhook = async (redis,req, res) => {
   }
 
      
-  const sendPulseReqBody = req.body[0]
   // console.log('---------------- the message: req ', sendPulseReqBody)
       console.log('-------------------------------------------------------------------------------------')
-    // console.log('---------------- the message sendPulseReqBody.info.message: ', sendPulseReqBody.info.message)
+    // console.log('---------------- the message sendPulseReqBody.info.message: ', sendPulseReqBody.contact)
+    // console.log('---------------- the message sendPulseReqBody.contact.variables.current_mini_app: ', sendPulseReqBody.contact.variables.current_mini_app)
+
     console.log('-------------------------------------------------------------------------------------')
 
 

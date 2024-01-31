@@ -17,7 +17,7 @@ const express = require("express"),
   const tynidm = require('./services/tynibot/tynidm');
   const sendpulsewebhook = require('./services/sendpulsebot/sendpulsewebhook');
   const fourpics1word = require('./services/sendpulsebot/fourpics1word');
-  const mathPicSolver = require('./services/sendpulsebot/mathPicSolver');
+  const {mathPicSolver} = require('./services/sendpulsebot/mathPicSolver');
   
   
   const findmatch = require('./services/tinder/findmatch');
