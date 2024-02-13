@@ -5,7 +5,6 @@ const { HumanMessage,SystemMessage,AIMessage } = require("@langchain/core/messag
 const { StringOutputParser } = require("@langchain/core/output_parsers");
 const {RunnableLambda,RunnableMap,RunnablePassthrough,RunnableSequence} = require ("@langchain/core/runnables");
 const { createCanvas, loadImage } = require('canvas')
-const { generate } = require("text-to-image");
 const {LLMChain} = require("langchain/chains");
 const { BufferMemory } = require("langchain/memory");
 
@@ -62,17 +61,45 @@ class AIResponse {
 
 const gptVissionWrraperImageOutput = async (aiSolution) => {
   console.log('sending req to openai gptVissionWrraperImageOutput')
-    // const uri = await generate(`${problemText} \n \n ${solutionText} \n \n ${answerText}`, {})
-    const uri = await generate(`${aiSolution}`, {
-      maxWidth: 720,
-      fontSize: 24,
-      fontFamily: 'Arial',
-      lineHeight: 40,
-      margin: 50,
-      bgColor: 'black',
-      textColor: 'white',
-    })
-      return uri
+
+      const width = 630
+    const height = 1200
+    const canvas = createCanvas(width, height)
+
+const context = canvas.getContext('2d')
+
+// Fill the background
+context.fillStyle = '#000'
+context.fillRect(0, 0, canvas.width, canvas.height)
+
+// Set the font properties
+context.font = '20px Arial' // Adjust the font size for better visibility on mobile
+context.textAlign = 'left'
+context.textBaseline = 'top'
+context.fillStyle = '#fff'
+
+    // Define the text
+    const problemText = 
+    `Problem: Mr. Hansraj needs to pack 7924 boxes 
+    into perfect squares. Find the least number of 
+    additional boxes he needs to purchase.`
+    const solutionText = `Solution: 
+    1- 
+    Find the square root of 7924: √7924 ≈ 89 (rounded down to the nearest integer) 
+    2- 
+    Check the next perfect square: 89^2 = 7921. Since 7921 is less than 7924, 
+    we need to consider the next higher perfect square. 
+    3- 
+    Next perfect square: 90^2 = 8100 4- Calculate the difference: 8100 - 7924 = 176`
+    const answerText = 'Answer: Mr. Hansraj needs 176 more boxes to create perfect squares.'
+
+// Draw the text on the canvas
+context.fillText(problemText, 10, 10)
+context.fillText(solutionText, 10, 50)
+context.fillText(answerText, 10, 90)
+  
+    const dataUrl = canvas.toDataURL('image/png')
+      return dataUrl
 
 }
 

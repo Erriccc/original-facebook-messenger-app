@@ -1,7 +1,7 @@
 const axios = require('axios');
 const fetch = require("node-fetch");
   const { URL, URLSearchParams } = require("url");
-const fbAccessToken = process.env.KCASSETS_INSTAGRAM_ACCESS_TOKEN2; 
+const fbAccessToken = process.env.KCASSETS_INSTAGRAM_ACCESS_TOKEN; 
 const pageId = process.env.KCASSETS_INSTAGRAM_PAGE_ID
 
 const fbApiSendMessageAttachment = async (message, attachmentType, attachmentUrl, accessToken) => {

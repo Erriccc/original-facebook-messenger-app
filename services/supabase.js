@@ -1,10 +1,37 @@
 const axios = require('axios')
 
 let bucketName = 'manychat_instagram_tinder_bot_pictures_bucket'
+const aimathsolverBucket = 'aimathsolver'
 
 
 const supabaseUrl = process.env.SUPABASE_URL
  const supabaseKey = process.env.SUPABASE_KEY
+
+ async function justUploadImage(imageUrl, storage,fileName) {
+
+
+  // Download image from URL
+  const response = await axios.get(imageUrl, { responseType: 'arraybuffer' })
+  const imageBuffer = Buffer.from(response.data, 'binary')
+  // Upload image to Supabase Storage
+
+  const { data, error } = await storage.from(aimathsolverBucket).upload(fileName, imageBuffer,{contentType: 'image/png'})
+
+  if (error) {
+      console.log('error uploading buffer.')
+    console.error(error)
+    return false
+  } else {
+    console.log(`Image uploaded to Supabase Storage: ${fileName}`)
+    // Get the public URL of the uploaded image
+    const { data } = storage.from(aimathsolverBucket).getPublicUrl(fileName)
+    console.log({data})
+    let publicURL = data.publicUrl
+      // return imageUrl
+      return publicURL
+  }
+}
+
 async function uploadImage(imageUrl, storage, supabase, fileName, user_id) {
     // Download image from URL
     const response = await axios.get(imageUrl, { responseType: 'arraybuffer' })
@@ -249,4 +276,4 @@ async function findMatch(supabase, swiper_id) {
     
   
   
-module.exports = { uploadImage, upsertUser, createSwipe, findMatch, findUserByIgId, supabaseAuthEmailOrPhone }
+module.exports = { justUploadImage, uploadImage, upsertUser, createSwipe, findMatch, findUserByIgId, supabaseAuthEmailOrPhone }

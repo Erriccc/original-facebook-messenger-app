@@ -180,7 +180,7 @@ class Messenger {
     // messenger.sendFbMessage(IGId, {
     // type: 'media',
     // mediaType: 'image', //image,audio,video
-    //Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: 	mp4, ogg, avi, mov, webm Max(25MB)
+    // // filetypes--- Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: 	mp4, ogg, avi, mov, webm Max(25MB)
     // url: 'https://www.scriptbyai.com/wp-content/uploads/2023/09/MathGPTPro-AI-math-solver-result.png' 
     // });
   
