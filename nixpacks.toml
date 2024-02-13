@@ -1,8 +1,8 @@
 [phases.setup]
-nixPkgs = ['nodejs_21','fontconfig']
+nixPkgs = ['nodejs_21']
 
 [phases.install]
-cmds = ['npm install']
+cmds = ['npm install', 'apt-get update' ,'apt-get install -y fontconfig']
 
 [start]
 cmd = 'npm run start'
