@@ -1,5 +1,5 @@
 [phases.setup]
-nixPkgs = ['nodejs_21']
+nixPkgs = ['nodejs_16','fontconfig']
 
 [phases.install]
 cmds = ['npm install']
