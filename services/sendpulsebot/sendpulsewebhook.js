@@ -46,6 +46,7 @@ const sendpulsewebhook = async (redis,req, res) => {
       const channelData = response.data.data.channel_data;
       console.log('-------------------------------------------------------------------------------------')
       console.log("channelData :", channelData)
+      console.log("channelData.id length :", channelData.id.toString().length)
       return channelData;
     } catch (error) {
       console.log(error);

@@ -14,7 +14,11 @@ const storage = supabase.storage
 
 
 const kcAssetBot = async (message, sendPulseAccessToken) => {
+  console.log('message.contact.channelId:', message.contact.channelId, 'typeOf message.contact.channelId', typeof message.contact.channelId, 'legnth:', message.contact.channelId.toString().length)
+    // const IGId = message.contact.channelId.toString();
     const IGId = message.contact.channelId;
+  console.log('IGId:', IGId, 'typeOf IGId: ', typeof IGId, 'length: ', IGId.length)
+  console.log('BigInt IGId:', BigInt(IGId), 'typeOf BigInt IGId: ', typeof BigInt(IGId), 'length: BigInt :', BigInt(IGId).length)
     const sendPulseContactId = message.contact.sendPulseId;
     const fbAccessToken = process.env.KCASSETS_INSTAGRAM_ACCESS_TOKEN; 
     const pageId = process.env.KCASSETS_INSTAGRAM_PAGE_ID
@@ -80,7 +84,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
         console.log('newImageUrl:', newImageUrl)
 
         // send fb media message ie: message of the dynamic picture generated!
-         messenger.sendFbMessage(IGId, {
+         messenger.sendFbMessage(BigInt(IGId), {
         type: 'media',
         mediaType: 'image', //image,audio,video
         // filetypes--- Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: 	mp4, ogg, avi, mov, webm Max(25MB)
