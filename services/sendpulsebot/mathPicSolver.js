@@ -66,7 +66,8 @@ const gptVissionWrraperImageOutput = async (aiSolution) => {
     const uri = await generate(`${aiSolution}`, {
       maxWidth: 720,
       fontSize: 24,
-      // fontFamily: 'Arial',
+      fontPath: '../../Roboto/Roboto-Light.ttf',
+      fontFamily: 'Roboto-light',
       lineHeight: 40,
       margin: 50,
       bgColor: 'black',
