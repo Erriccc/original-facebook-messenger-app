@@ -4,5 +4,8 @@ nixPkgs = ['nodejs_21','fontconfig']
 [phases.install]
 cmds = ['npm install']
 
+[phases.build]
+cmds = ['npm run build']
+
 [start]
-cmd = 'npm run server:start'
+cmd = ['npm run start']
