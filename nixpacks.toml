@@ -2,7 +2,7 @@
 nixPkgs = ['nodejs_21']
 
 [phases.install]
-cmds = ['npm install', 'apt-get update' ,'apt-get install -y fontconfig']
+cmds = ['apt-get update' ,'apt-get install -y fontconfig', 'npm install']
 
 [start]
 cmd = 'npm run start'
