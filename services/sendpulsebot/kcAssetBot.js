@@ -57,10 +57,10 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
 
           Solution:boxes needed to create perfect squares = 176.
 
-          Indent the numbered solution steps with two tab characters (\t\t):  
+          Indent the numbered solution steps with one or two tab characters (\t\t):  
 
           Logic:
-          \t\t step 1- Find the square root...  
+          \t step 1- Find the square root...  
           \t\t step 2- Check the next perfect...
 
           When explaining mathematical reasoning, please use non-breaking spaces (\xA0) to write out key equations, formulae, or mathematical expressions on separate lines to make your mathematical working clearer to the reader.. For example:
@@ -75,9 +75,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
          // use openai to interprete the users message
         const aiSolutionImageFomart = await gptVissionWrraperImageOutput(aiSolution)
 
-        // use sendpulse to send a flow of messages to the user
-        // messenger.sendFlowToContact(sendPulseContactId,flowId,{aiSolution,imageUrl})
-        console.log('message sent!')
+       
 
           // generate a dynamic image that nicely displays the string generated from the openai responce
         const newImageUrl = await justUploadImage(aiSolutionImageFomart, storage,`aiSolution${Date.now()}`)
@@ -91,8 +89,26 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
         url: newImageUrl
         });
 
-        }
+         // use sendpulse to send a flow of messages to the user
+        messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
+        console.log('message sent!')
 
+        // set the active image url for follow up questions within the conversations
+        try {
+          const response = await axios.post('https://api.sendpulse.com/instagram/contacts/setVariable', {
+              contact_id: sendPulseContactId,
+              variable_name:'mathSolverImage',
+              variable_value: imageUrl  
+            }, 
+            {
+              headers: {
+                Authorization: `Bearer ${sendPulseAccessToken}`  
+              }
+            });
+        } catch(error) {
+          console.error(error);
+        }
+        }
     }
     
   }

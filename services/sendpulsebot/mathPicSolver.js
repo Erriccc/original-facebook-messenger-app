@@ -99,7 +99,10 @@ const gptVissionWrraperImageOutput = async (aiSolution) => {
       const aiResponse = new AIResponse();
       const response = await aiResponse.getAIResponse(
         req.body.imageUrl, 
-        "You are a problem solving expert, can you solve the problem in the image above while showing step by step solutions?"
+        ` You are a problem solving expert, 
+        the user is asking questions that could be related or unrelated to the attached picture.
+        your job is to determine if the question is related to the image, and answer the question accordingly.
+        ${followUpQuestion}`
       );
       // console.log(response)
 
