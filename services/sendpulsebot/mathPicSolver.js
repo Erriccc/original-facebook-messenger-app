@@ -30,6 +30,7 @@ class AIResponse {
     // this.PromptTemplate = new PromptTemplate();
     // this.HumanMessage = new HumanMessage();
 
+    // this.chain = RunnableSequence.from([this.model]);
     this.chain = RunnableSequence.from([this.model, this.stringParser]);
     // this.upstashRedisChatMessageHistory = UpstashRedisChatMessageHistory;
   }
@@ -95,20 +96,24 @@ const gptVissionWrraperImageOutput = async (aiSolution) => {
       console.log('req.body-------------------------------------------')
       console.log(req.body)
       console.log(req.body.imageUrl)
+      const followUpQuestion = req.body.followUpQuestion
         
       const aiResponse = new AIResponse();
       const response = await aiResponse.getAIResponse(
         req.body.imageUrl, 
         ` You are a problem solving expert, 
         the user is asking questions that could be related or unrelated to the attached picture.
-        your job is to determine if the question is related to the image, and answer the question accordingly.
-        ${followUpQuestion}`
+        your job is to determine if the question is related to the image, and use that context to answer the question accordingly.
+        follow up question: ${followUpQuestion}
+        please make sure your response only answers to the follow up question
+        
+        `
       );
       // console.log(response)
 
-          res.status(200).json([
-            {fourpics:response},
-          ]);
+          res.status(200).json(
+            {response}
+          );
 
     };
 
