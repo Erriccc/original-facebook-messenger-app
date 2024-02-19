@@ -50,6 +50,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
 
           Separate the solution and Logic  into paragraphs using two newline characters:
 
+          \t @alt_apps on instagram 
 
           Logic: 
           1- Find the square root...
@@ -67,6 +68,8 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
           \xA0\xA0
           x = 5 + 3
           \xA0\xA0
+          \t @alt_apps on instagram 
+
           The instructions above demonstrate how to properly format your text to make the output easy to read. 
                   `
         )
