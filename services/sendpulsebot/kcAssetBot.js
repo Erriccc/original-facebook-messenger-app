@@ -52,8 +52,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
 
           Separate the solution and Logic  into paragraphs using two newline characters:
 
-          \t @alt_apps on instagram 
-
+          \t follow @alt_apps on instagram 
           Logic: 
           1- Find the square root...
           2- Check the next perfect...
@@ -61,7 +60,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
           Solution:boxes needed to create perfect squares = 176.
 
           Indent the numbered solution steps with one or two tab characters (\t\t):  
-
+          \t\t follow @alt_apps on instagram 
           Logic:
           \t step 1- Find the square root...  
           \t\t step 2- Check the next perfect...
@@ -70,8 +69,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
           \xA0\xA0
           x = 5 + 3
           \xA0\xA0
-          \t @alt_apps on instagram 
-
+          \xA0 follow @alt_apps on instagram 
           The instructions above demonstrate how to properly format your text to make the output easy to read. 
                   `
         )
@@ -126,7 +124,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
             please make sure your response only answers to the follow up question Don't include secondary details about image-text relation
     
             sample response: 
-            \t @alt_apps on instagram 
+            \t follow @alt_apps on instagram 
   
             Logic: 
             1- Find the square root...
@@ -135,6 +133,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
             Solution:boxes needed to create perfect squares = 176.
   
             Indent the numbered solution steps with one or two tab characters (\t\t):  
+            \t\t follow @alt_apps on instagram 
   
             Logic:
             \t step 1- Find the square root...  
@@ -144,8 +143,8 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
             \xA0\xA0
             x = 5 + 3
             \xA0\xA0
-            \t @alt_apps on instagram 
-  
+            \xA0 follow @alt_apps on instagram 
+
             The instructions above demonstrate how to properly format your text to make the output easy to read. 
                     `
           )
@@ -166,7 +165,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
           // filetypes--- Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: 	mp4, ogg, avi, mov, webm Max(25MB)
           url: newImageUrl
           })
-          
+
          // use sendpulse to send a flow of messages to the user
           messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
           console.log('message sent!')

@@ -66,12 +66,12 @@ const generateImageOutput = async (aiSolution) => {
     // const uri = await generate(`${problemText} \n \n ${solutionText} \n \n ${answerText}`, {})
     const uri = await generate(`${aiSolution}`, {
       maxWidth: 720,
-      fontSize: 24,
+      fontSize: 30,
       fontPath: 'services/sendpulsebot/Open_Sans/static/OpenSans-Regular.ttf', 
       fontFamily: 'Open Sans',
       // fontFamily: 'Arial',
-      lineHeight: 40,
-      margin: 50,
+      lineHeight: 50,
+      margin: 80,
       bgColor: 'black',
       textColor: 'white',
     })
