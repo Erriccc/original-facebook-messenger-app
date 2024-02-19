@@ -2,7 +2,7 @@ const axios = require('axios');
 const { createClient } = require('@supabase/supabase-js')
 const { justUploadImage, uploadImage, upsertUser,  createSwipe, findMatch, findUserByIgId, supabaseAuthEmailOrPhone } = require("../supabase")
 const {Messenger} = require('./outBoundMessenger');
-const {gptVissionWrraper,gptVissionWrraperImageOutput} = require('./mathPicSolver');
+const {gptVissionWrraper,generateImageOutput} = require('./mathPicSolver');
 
 
 
@@ -40,7 +40,9 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
             let imageUrl = getAttachmentUrl(message)
             // {{$['imageUrl']}}"
         // // // const aiSolution = await gptVissionWrraper('https://www.scriptbyai.com/wp-content/uploads/2023/09/MathGPTPro-AI-math-solver-upload-image.webp', `You are a problem solving expert, can you solve the problem in the image above while showing step by step solutions?`)
-        const aiSolution = await gptVissionWrraper(imageUrl, 
+        
+         // use openai to interprete the users message
+         const aiSolution = await gptVissionWrraper(imageUrl, 
           `You are a problem solving expert, 
         can you solve the problem in the image above 
         your response should only include:  
@@ -74,13 +76,12 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
                   `
         )
          console.log('processing done, sending message')
-
-         // use openai to interprete the users message
-        const aiSolutionImageFomart = await gptVissionWrraperImageOutput(aiSolution)
-
-       
+        //  ⬇
 
           // generate a dynamic image that nicely displays the string generated from the openai responce
+        const aiSolutionImageFomart = await generateImageOutput(aiSolution)
+       
+        // Upload generated image to supabase and get public url returned 
         const newImageUrl = await justUploadImage(aiSolutionImageFomart, storage,`aiSolution${Date.now()}`)
         console.log('newImageUrl:', newImageUrl)
 
@@ -112,6 +113,62 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
           console.error(error);
         }
         }
+        // check if the message is text and a follow up to an image
+        else if(message.type == 'text' && message.userVariables.mathSolverImage){
+          // get the mathSolverImage
+          let imageUrl = getAttachmentUrl(message)
+
+          const aiSolution = await gptVissionWrraper(imageUrl, 
+            `You are a problem solving expert, 
+            the user is asking questions that could be related or unrelated to the attached picture.
+            your job is to determine if the question is related to the image, and use that context to answer the question accordingly.
+            follow up question: ${message.text}
+            please make sure your response only answers to the follow up question Don't include secondary details about image-text relation
+    
+            sample response: 
+            \t @alt_apps on instagram 
+  
+            Logic: 
+            1- Find the square root...
+            2- Check the next perfect...
+  
+            Solution:boxes needed to create perfect squares = 176.
+  
+            Indent the numbered solution steps with one or two tab characters (\t\t):  
+  
+            Logic:
+            \t step 1- Find the square root...  
+            \t\t step 2- Check the next perfect...
+  
+            When explaining mathematical reasoning, please use non-breaking spaces (\xA0) to write out key equations, formulae, or mathematical expressions on separate lines to make your mathematical working clearer to the reader.. For example:
+            \xA0\xA0
+            x = 5 + 3
+            \xA0\xA0
+            \t @alt_apps on instagram 
+  
+            The instructions above demonstrate how to properly format your text to make the output easy to read. 
+                    `
+          )
+           console.log('processing done, sending message')
+          //  ⬇
+
+            // generate a dynamic image that nicely displays the string generated from the openai responce
+        const aiSolutionImageFomart = await generateImageOutput(aiSolution)
+       
+        // Upload generated image to supabase and get public url returned 
+        const newImageUrl = await justUploadImage(aiSolutionImageFomart, storage,`aiSolution${Date.now()}`)
+        console.log('newImageUrl:', newImageUrl)
+
+         // send fb media message ie: message of the dynamic picture generated!
+         await messenger.sendFbMessage(BigInt(IGId), {
+          type: 'media',
+          mediaType: 'image', //image,audio,video
+          // filetypes--- Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: 	mp4, ogg, avi, mov, webm Max(25MB)
+          url: newImageUrl
+          })
+
+
+        }
     }
     
   }
@@ -119,6 +176,8 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
   function getAttachmentUrl(message) {
     if (message.attachment && message.attachment.url) {
       return message.attachment.url;
+    } else if (message.userVariables.mathSolverImage){
+      return message.userVariables.mathSolverImage;
     }
     return null;
   }

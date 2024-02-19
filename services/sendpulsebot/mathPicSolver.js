@@ -61,8 +61,8 @@ class AIResponse {
   
 }
 
-const gptVissionWrraperImageOutput = async (aiSolution) => {
-  console.log('sending req to openai gptVissionWrraperImageOutput')
+const generateImageOutput = async (aiSolution) => {
+  console.log('sending req to openai generateImageOutput')
     // const uri = await generate(`${problemText} \n \n ${solutionText} \n \n ${answerText}`, {})
     const uri = await generate(`${aiSolution}`, {
       maxWidth: 720,
@@ -117,4 +117,4 @@ const gptVissionWrraperImageOutput = async (aiSolution) => {
 
     };
 
-    module.exports = {mathPicSolver, gptVissionWrraper,gptVissionWrraperImageOutput};
+    module.exports = {mathPicSolver, gptVissionWrraper,generateImageOutput};
