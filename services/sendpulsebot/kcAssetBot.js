@@ -166,8 +166,10 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
           // filetypes--- Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: 	mp4, ogg, avi, mov, webm Max(25MB)
           url: newImageUrl
           })
-
-
+          
+         // use sendpulse to send a flow of messages to the user
+          messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
+          console.log('message sent!')
         }
     }
     
