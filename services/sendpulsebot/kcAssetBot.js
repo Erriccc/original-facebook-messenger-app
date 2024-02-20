@@ -43,35 +43,67 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
         
          // use openai to interprete the users message
          const aiSolution = await gptVissionWrraper(imageUrl, 
-          `You are a problem solving expert, 
-        can you solve the problem in the image above 
-        your response should only include:  
-        Solution: Answer to problem ,
-        Logic: Outline the 3-5 most pivotal breakthrough steps, insights or inferences that allowed you to reach the solution. Don't include secondary details.
-        // Formatting Instructions 
+        //   `You are a problem solving expert, 
+        // can you solve the problem in the image above 
+        // your response should only include:  
+        // Solution: Answer to problem ,
+        // Logic: Outline the 3-5 most pivotal breakthrough steps, insights or inferences that allowed you to reach the solution. Don't include secondary details.
+        // // Formatting Instructions 
 
-          Separate the solution and Logic  into paragraphs using two newline characters:
+        //   Separate the solution and Logic  into paragraphs using two newline characters:
 
-          \t follow @alt_apps on instagram 
-          Logic: 
-          1- Find the square root...
-          2- Check the next perfect...
+        //   \t follow @alt_apps on instagram 
+        //   Logic: 
+        //   1- Find the square root...
+        //   2- Check the next perfect...
 
-          Solution:boxes needed to create perfect squares = 176.
+        //   Solution:boxes needed to create perfect squares = 176.
 
-          Indent the numbered solution steps with one or two tab characters (\t\t):  
-          \t\t follow @alt_apps on instagram 
-          Logic:
-          \t step 1- Find the square root...  
-          \t\t step 2- Check the next perfect...
+        //   Indent the numbered solution steps with one or two tab characters (\t\t):  
+        //   \t\t follow @alt_apps on instagram 
+        //   Logic:
+        //   \t step 1- Find the square root...  
+        //   \t\t step 2- Check the next perfect...
 
-          When explaining mathematical reasoning, please use non-breaking spaces (\xA0) to write out key equations, formulae, or mathematical expressions on separate lines to make your mathematical working clearer to the reader.. For example:
-          \xA0\xA0
-          x = 5 + 3
-          \xA0\xA0
-          \xA0 follow @alt_apps on instagram 
-          The instructions above demonstrate how to properly format your text to make the output easy to read. 
-                  `
+        //   When explaining mathematical reasoning, please use non-breaking spaces (\xA0) to write out key equations, formulae, or mathematical expressions on separate lines to make your mathematical working clearer to the reader.. For example:
+        //   \xA0\xA0
+        //   x = 5 + 3
+        //   \xA0\xA0
+        //   \xA0 follow @alt_apps on instagram 
+        //   The instructions above demonstrate how to properly format your text to make the output easy to read. 
+        //           `
+        `
+        You are @alt_apps on instagram a problem-solving expert. Your task is to solve the problem in the image above.
+
+Your response should follow this format:
+
+Solution:
+[Answer to the problem, written concisely]
+
+Logic:
+[Outline the 3-5 most pivotal steps, insights or inferences that allowed you to reach the solution. Do not include secondary details.]
+
+Formatting Instructions:
+- Separate the Solution and Logic sections by two newline characters.
+- Indent numbered steps in the Logic section with two tab characters (\t\t).
+- Use non-breaking spaces (\xA0\xA0) to write out key equations, formulae, or mathematical expressions on separate lines for clarity.
+
+Example:
+
+\xA0 follow @alt_apps on instagram 
+Solution:
+[Concise answer]
+
+Logic:
+\t\t1. [Step 1]
+\t\t2. [Step 2]
+
+\xA0\xA0
+[Mathematical expression]
+\xA0\xA0
+
+Be concise in your responses, and strictly follow the formatting instructions above.
+        `
         )
          console.log('processing done, sending message')
         //  ⬇
@@ -117,36 +149,67 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
           let imageUrl = getAttachmentUrl(message)
 
           const aiSolution = await gptVissionWrraper(imageUrl, 
-            `You are a problem solving expert, 
-            the user is asking questions that could be related or unrelated to the attached picture.
-            your job is to determine if the question is related to the image, and use that context to answer the question accordingly.
-            follow up question: ${message.text}
-            please make sure your response only answers to the follow up question Don't include secondary details about image-text relation
+            // `You are a problem solving expert, 
+            // the user is asking questions that could be related or unrelated to the attached picture.
+            // your job is to determine if the question is related to the image, and use that context to answer the question accordingly.
+            // follow up question: ${message.text}
+            // please make sure your response only answers to the follow up question Don't include secondary details about image-text relation
     
-            sample response: 
-            \t follow @alt_apps on instagram 
+            // sample response: 
+            // \t follow @alt_apps on instagram 
   
-            Logic: 
-            1- Find the square root...
-            2- Check the next perfect...
+            // Logic: 
+            // 1- Find the square root...
+            // 2- Check the next perfect...
   
-            Solution:boxes needed to create perfect squares = 176.
+            // Solution:boxes needed to create perfect squares = 176.
   
-            Indent the numbered solution steps with one or two tab characters (\t\t):  
-            \t\t follow @alt_apps on instagram 
+            // Indent the numbered solution steps with one or two tab characters (\t\t):  
+            // \t\t follow @alt_apps on instagram 
   
-            Logic:
-            \t step 1- Find the square root...  
-            \t\t step 2- Check the next perfect...
+            // Logic:
+            // \t step 1- Find the square root...  
+            // \t\t step 2- Check the next perfect...
   
-            When explaining mathematical reasoning, please use non-breaking spaces (\xA0) to write out key equations, formulae, or mathematical expressions on separate lines to make your mathematical working clearer to the reader.. For example:
-            \xA0\xA0
-            x = 5 + 3
-            \xA0\xA0
-            \xA0 follow @alt_apps on instagram 
+            // When explaining mathematical reasoning, please use non-breaking spaces (\xA0) to write out key equations, formulae, or mathematical expressions on separate lines to make your mathematical working clearer to the reader.. For example:
+            // \xA0\xA0
+            // x = 5 + 3
+            // \xA0\xA0
+            // \xA0 follow @alt_apps on instagram 
 
-            The instructions above demonstrate how to properly format your text to make the output easy to read. 
-                    `
+            // The instructions above demonstrate how to properly format your text to make the output easy to read. 
+            //         `
+
+            `
+            You are @alt_apps on instagram a problem-solving expert. The user may ask questions related or unrelated to the attached image. Your job is to determine if the question is relevant to the image and use that context to answer accordingly.
+
+Follow up question: ${message.text}
+
+Please make sure your response only answers the follow-up question. Do not include secondary details about the image-text relation.
+
+Sample response:
+Solution: Provide only the final answer to the problem, without any additional context or explanation.
+
+Logic:
+1. Outline 3-5 key steps, insights, or inferences that led to the solution. Do not include secondary details.
+2. Use numbered steps, indented with two tab characters (\t\t).
+3. When explaining mathematical reasoning, use non-breaking spaces (\xA0) to write out key equations, formulae, or mathematical expressions on separate lines.
+
+For example:
+\xA0 follow @alt_apps on instagram 
+Solution: 176
+
+Logic:
+\t\t1. Find the square root of the given number.
+\t\t2. \xA0\xA0 
+          x = √(given number)
+       \xA0\xA0
+\t\t3. Check the next perfect square above the calculated square root.
+\t\t4. Determine the difference between the given number and the next perfect square.
+\t\t5. This difference is the number of boxes needed to create a perfect square.
+
+Remember, your response should focus solely on answering the follow-up question, following the specified format. Do not include any additional explanations or context.
+            `
           )
            console.log('processing done, sending message')
           //  ⬇
