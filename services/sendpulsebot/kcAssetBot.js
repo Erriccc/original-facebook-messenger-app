@@ -88,7 +88,7 @@ Formatting Instructions:
 - Indent numbered steps in the Logic section with two tab characters (\t\t).
 - Use non-breaking spaces (\xA0\xA0) to write out key equations, formulae, or mathematical expressions on separate lines for clarity.
 
-Example response:
+Example:
 
 \xA0 follow @alt_apps on instagram 
 Solution:
@@ -195,7 +195,7 @@ Logic:
 2. Use numbered steps, indented with two tab characters (\t\t).
 3. When explaining mathematical reasoning, use non-breaking spaces (\xA0) to write out key equations, formulae, or mathematical expressions on separate lines.
 
-For example response:
+For example:
 \xA0 follow @alt_apps on instagram 
 Solution: 176
 
