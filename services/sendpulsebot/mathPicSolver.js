@@ -30,8 +30,8 @@ class AIResponse {
     // this.PromptTemplate = new PromptTemplate();
     // this.HumanMessage = new HumanMessage();
 
-    // this.chain = RunnableSequence.from([this.model]);
-    this.chain = RunnableSequence.from([this.model, this.stringParser]);
+    this.chain = this.model;
+    // this.chain = RunnableSequence.from([this.model, this.stringParser]);
     // this.upstashRedisChatMessageHistory = UpstashRedisChatMessageHistory;
   }
 
