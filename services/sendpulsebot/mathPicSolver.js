@@ -30,7 +30,6 @@ class AIResponse {
     // this.PromptTemplate = new PromptTemplate();
     // this.HumanMessage = new HumanMessage();
 
-    // this.chain = this.model;
     this.chain = RunnableSequence.from([this.model, this.stringParser]);
     // this.upstashRedisChatMessageHistory = UpstashRedisChatMessageHistory;
   }
@@ -44,8 +43,8 @@ class AIResponse {
             ]
           });
 
-          return await this.model.invoke([imagePrompt]);
-          // return await this.chain.invoke([imagePrompt]);
+          // return await this.model.invoke([imagePrompt]);
+          return await this.chain.invoke([imagePrompt]);
         }
 
       }
