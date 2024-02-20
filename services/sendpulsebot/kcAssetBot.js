@@ -187,7 +187,7 @@ Follow up question: ${message.text}
 
 Please make sure your response only answers the follow-up question. Do not include secondary details about the image-text relation.
 
-Sample response:
+Sample response :
 Solution: Provide only the final answer to the problem, without any additional context or explanation.
 
 Logic:
