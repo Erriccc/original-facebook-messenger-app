@@ -1,4 +1,5 @@
 const axios = require('axios');
+const FormData = require('form-data');
 const { createClient } = require('@supabase/supabase-js')
 const { justUploadImage, uploadImage, upsertUser,  createSwipe, findMatch, findUserByIgId, supabaseAuthEmailOrPhone } = require("../supabase")
 const {Messenger} = require('./outBoundMessenger');
@@ -31,8 +32,10 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
 
     // Find the active bot/feature the user wants
     if (message.userVariables.current_mini_app == 'ai_math_solver'){
+    
+      
 
-    console.log('processing message reaction')
+    console.log('processing ai_math_solver message reaction')
 
         // confirm ther is an attachment and the attachment is an image
         if (message.attachmentType && message.attachmentType == 'image'){
@@ -43,35 +46,6 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
         
          // use openai to interprete the users message
          const aiSolution = await gptVissionWrraper(imageUrl, 
-        //   `You are a problem solving expert, 
-        // can you solve the problem in the image above 
-        // your response should only include:  
-        // Solution: Answer to problem ,
-        // Logic: Outline the 3-5 most pivotal breakthrough steps, insights or inferences that allowed you to reach the solution. Don't include secondary details.
-        // // Formatting Instructions 
-
-        //   Separate the solution and Logic  into paragraphs using two newline characters:
-
-        //   \t follow @alt_apps on instagram 
-        //   Logic: 
-        //   1- Find the square root...
-        //   2- Check the next perfect...
-
-        //   Solution:boxes needed to create perfect squares = 176.
-
-        //   Indent the numbered solution steps with one or two tab characters (\t\t):  
-        //   \t\t follow @alt_apps on instagram 
-        //   Logic:
-        //   \t step 1- Find the square root...  
-        //   \t\t step 2- Check the next perfect...
-
-        //   When explaining mathematical reasoning, please use non-breaking spaces (\xA0) to write out key equations, formulae, or mathematical expressions on separate lines to make your mathematical working clearer to the reader.. For example:
-        //   \xA0\xA0
-        //   x = 5 + 3
-        //   \xA0\xA0
-        //   \xA0 follow @alt_apps on instagram 
-        //   The instructions above demonstrate how to properly format your text to make the output easy to read. 
-        //           `
         `
         You are @alt_apps on instagram a problem-solving expert. Your task is to solve the problem in the image above.
 
@@ -233,6 +207,103 @@ Remember, your response should focus solely on answering the follow-up question,
           messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
           console.log('message sent!')
         }
+    }
+    // else if (message.userVariables.current_mini_app == 'remove_bg'){
+    //   console.log('processing remove_bg message reaction')
+
+    //   if (message.attachmentType && message.attachmentType == 'image'){
+            
+    //     let imageUrl = getAttachmentUrl(message)
+
+    //     const formData = new FormData();
+    //     formData.append('size', 'auto');
+    //     formData.append('image_url', imageUrl);
+      
+
+    //     axios({
+    //       method: 'post',
+    //       url: 'https://api.remove.bg/v1.0/removebg',
+    //       data: formData,
+    //       responseType: 'arraybuffer',
+    //       headers: {
+    //         ...formData.getHeaders(),
+    //         'X-Api-Key': process.env.REMOVE_BG_API_KEY,
+    //       },
+    //       encoding: null
+    //     })
+    //     .then((response) => {
+    //       if(response.status != 200) return console.error('Error:', response.status, response.statusText);
+
+    //       const base64Image = Buffer.from(response.data, 'binary').toString('base64');
+    //       const noBgImageURL = `data:image/png;base64,${base64Image}`;
+
+    //       // Upload generated image to supabase and get public url returned 
+    //     const newImageUrl = await justUploadImage(noBgImageURL, storage,`removeBg${Date.now()}`)
+    //     console.log('newImageUrl:', newImageUrl)
+
+    //     // send fb media message ie: message of the dynamic picture generated!
+    //      await messenger.sendFbMessage(BigInt(IGId), {
+    //     type: 'media',
+    //     mediaType: 'image', //image,audio,video
+    //     // filetypes--- Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: 	mp4, ogg, avi, mov, webm Max(25MB)
+    //     url: newImageUrl
+    //     })
+
+
+    //       // fs.writeFileSync("no-bg.png", response.data);
+    //     })
+    //     .catch((error) => {
+    //         return console.error('Request failed:', error);
+    //     });
+
+    //   }
+
+    // }
+    else if (message.userVariables.current_mini_app == 'remove_bg') {
+      console.log('processing remove_bg message reaction')
+    
+      if (message.attachmentType && message.attachmentType == 'image') {
+        let imageUrl = getAttachmentUrl(message)
+    
+        try {
+          const formData = new FormData();
+          formData.append('size', 'auto');
+          formData.append('image_url', imageUrl);
+    
+          const response = await axios({
+            method: 'post',
+            url: 'https://api.remove.bg/v1.0/removebg',
+            data: formData,
+            responseType: 'arraybuffer',
+            headers: {
+              ...formData.getHeaders(),
+              'X-Api-Key': process.env.REMOVE_BG_API_KEY,
+            },
+            encoding: null
+          });
+    
+          if (response.status !== 200) {
+            throw new Error(`Error: ${response.status} ${response.statusText}`);
+          }
+    
+          const base64Image = Buffer.from(response.data, 'binary').toString('base64');
+          const noBgImageURL = `data:image/png;base64,${base64Image}`;
+    
+          // Upload generated image to supabase and get public url returned
+          const newImageUrl = await justUploadImage(noBgImageURL, storage, `removeBg${Date.now()}`);
+          console.log('newImageUrl:', newImageUrl);
+    
+          // send fb media message ie: message of the dynamic picture generated!
+          await messenger.sendFbMessage(BigInt(IGId), {
+            type: 'media',
+            mediaType: 'image', //image,audio,video
+            // filetypes--- Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: mp4, ogg, avi, mov, webm Max(25MB)
+            url: newImageUrl
+          });
+        } catch (error) {
+          console.error('Request failed:', error);
+        }
+      }
     }
     
   }
