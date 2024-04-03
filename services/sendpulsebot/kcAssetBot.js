@@ -208,57 +208,6 @@ Remember, your response should focus solely on answering the follow-up question,
           console.log('message sent!')
         }
     }
-    // else if (message.userVariables.current_mini_app == 'remove_bg'){
-    //   console.log('processing remove_bg message reaction')
-
-    //   if (message.attachmentType && message.attachmentType == 'image'){
-            
-    //     let imageUrl = getAttachmentUrl(message)
-
-    //     const formData = new FormData();
-    //     formData.append('size', 'auto');
-    //     formData.append('image_url', imageUrl);
-      
-
-    //     axios({
-    //       method: 'post',
-    //       url: 'https://api.remove.bg/v1.0/removebg',
-    //       data: formData,
-    //       responseType: 'arraybuffer',
-    //       headers: {
-    //         ...formData.getHeaders(),
-    //         'X-Api-Key': process.env.REMOVE_BG_API_KEY,
-    //       },
-    //       encoding: null
-    //     })
-    //     .then((response) => {
-    //       if(response.status != 200) return console.error('Error:', response.status, response.statusText);
-
-    //       const base64Image = Buffer.from(response.data, 'binary').toString('base64');
-    //       const noBgImageURL = `data:image/png;base64,${base64Image}`;
-
-    //       // Upload generated image to supabase and get public url returned 
-    //     const newImageUrl = await justUploadImage(noBgImageURL, storage,`removeBg${Date.now()}`)
-    //     console.log('newImageUrl:', newImageUrl)
-
-    //     // send fb media message ie: message of the dynamic picture generated!
-    //      await messenger.sendFbMessage(BigInt(IGId), {
-    //     type: 'media',
-    //     mediaType: 'image', //image,audio,video
-    //     // filetypes--- Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: 	mp4, ogg, avi, mov, webm Max(25MB)
-    //     url: newImageUrl
-    //     })
-
-
-    //       // fs.writeFileSync("no-bg.png", response.data);
-    //     })
-    //     .catch((error) => {
-    //         return console.error('Request failed:', error);
-    //     });
-
-    //   }
-
-    // }
     else if (message.userVariables.current_mini_app == 'remove_bg') {
       console.log('processing remove_bg message reaction')
     
@@ -304,6 +253,10 @@ Remember, your response should focus solely on answering the follow-up question,
           console.error('Request failed:', error);
         }
       }
+    }
+    else if (message.userVariables.current_mini_app == 'voice_changer') {
+      // confirm ther is an attachment and the attachment is an image
+      if (message.attachmentType && message.attachmentType == 'audio'){}
     }
     
   }

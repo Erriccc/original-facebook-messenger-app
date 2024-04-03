@@ -18,6 +18,7 @@ const express = require("express"),
   const sendpulsewebhook = require('./services/sendpulsebot/sendpulsewebhook');
   const fourpics1word = require('./services/sendpulsebot/fourpics1word');
   const {mathPicSolver} = require('./services/sendpulsebot/mathPicSolver');
+  const {text2speech,speech2speech} = require('./services/sendpulsebot/elevenLabs');
   
   
   const findmatch = require('./services/tinder/findmatch');
@@ -96,6 +97,15 @@ app.post("/fourpics1word", async (req, res) => {
 app.post("/mathPicSolver", async (req, res) => {
   mathPicSolver(redisClient,req, res);
 });
+
+app.post("/speech2speech", async (req, res) => {
+  speech2speech(redisClient,req, res);
+});
+
+app.post("/text2speech", async (req, res) => {
+  text2speech(redisClient,req, res);
+});
+
 
 
 // instagram://direct?username=

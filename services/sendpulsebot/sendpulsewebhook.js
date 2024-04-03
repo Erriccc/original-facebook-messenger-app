@@ -52,6 +52,24 @@ const sendpulsewebhook = async (redis,req, res) => {
       console.log(error);
     }
   }
+
+  const setContactChannelId = async (contactsId,channellId) => {
+    try {
+      const response = await axios.post('https://api.sendpulse.com/instagram/contacts/setVariable', {
+        contact_id: contactsId,
+        variable_name:'channellId',
+        variable_value: channellId  
+      }, 
+      {
+        headers: {
+          Authorization: `Bearer ${accessToken}`  
+        }
+      });
+      
+    } catch (error) {
+      console.log(error);
+    }
+  }
   
   const contactsChannelData = await getContact(contactId);
 
@@ -128,7 +146,8 @@ const sendpulsewebhook = async (redis,req, res) => {
   if (message.bot.id == botIds.kcAssetsIgBot){
     // media message has been received, handle the message type, then determine the use case of the media, then send follow up based on the usecase
   
-  
+    // (userVariables.channellId === '' || userVariables.channellId !== contactsChannelData.id) && await setContactChannelId(contactId, contactsChannelData.id)
+    (userVariables.channellId !== contactsChannelData.id) && await setContactChannelId(contactId, contactsChannelData.id)
     await kcAssetBot(message, accessToken)
   }
 
