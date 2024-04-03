@@ -42,7 +42,7 @@ async function justUploadAudio(audioBuffer, storage,fileName) {
   // const imageBuffer = Buffer.from(response.data, 'binary')
   // Upload image to Supabase Storage
 
-  const { data, error } = await storage.from(aimathsolverBucket).upload(fileName, audioBuffer,{contentType: 'audio/mp3'})
+  const { data, error } = await storage.from(aimathsolverBucket).upload(fileName, audioBuffer,{contentType: 'audio/mp4'})
 
   if (error) {
       console.log('error uploading buffer.')

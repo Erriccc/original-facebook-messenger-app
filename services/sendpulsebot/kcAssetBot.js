@@ -1,7 +1,7 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const { createClient } = require('@supabase/supabase-js')
-const { justUploadImage, uploadImage, upsertUser,  createSwipe, findMatch, findUserByIgId, supabaseAuthEmailOrPhone } = require("../supabase")
+const { justUploadAudio, justUploadImage, uploadImage, upsertUser,  createSwipe, findMatch, findUserByIgId, supabaseAuthEmailOrPhone } = require("../supabase")
 const {Messenger} = require('./outBoundMessenger');
 const {gptVissionWrraper,generateImageOutput} = require('./mathPicSolver');
 
@@ -25,6 +25,7 @@ const kcAssetBot = async (message, sendPulseAccessToken) => {
     const pageId = process.env.KCASSETS_INSTAGRAM_PAGE_ID
     const flowId = '65ba0b35310fc3cef108b641'
     // const flowId = '65aaffafbe3d70f3e401e33d'
+    const elevenLabsApiKey = process.env.ELEVEN_LABS_API_KEY
 
     const messenger = new Messenger(fbAccessToken, pageId, sendPulseAccessToken);
 
@@ -255,8 +256,63 @@ Remember, your response should focus solely on answering the follow-up question,
       }
     }
     else if (message.userVariables.current_mini_app == 'voice_changer') {
-      // confirm ther is an attachment and the attachment is an image
-      if (message.attachmentType && message.attachmentType == 'audio'){}
+      // confirm ther is an attachment and the attachment is an audio and the user wants to convert speech to speech audio
+      if (message.attachmentType && message.attachmentType == 'audio' && message.userVariables.speech2SpeechReq === 'true'){
+        const voiceModel =  (message.userVariables.voiceModel === 'Tamara'? 'ZOtTHD5HJflREhTbZ7sc' :'H1JjD7OHmS3KIOu5PDkI')
+
+        const audioContent = await axios.get(message.attachment.url, { responseType: 'arraybuffer' })
+       
+        const form = new FormData();
+        // form.append('audio', base64AudioData, 'audio.mp3');
+        form.append('audio', Buffer.from(audioContent.data, 'base64'), 'audio.mp3');
+
+        const options = {
+          method: 'POST',
+          url: `https://api.elevenlabs.io/v1/speech-to-speech/${voiceModel}`,
+          headers: {
+            accept: 'audio/mpeg', // Set the expected response type to audio/mpeg.
+            'content-type': 'multipart/form-data', // Set the content type to application/json.
+            // 'content-type': 'application/json', // Set the content type to application/json.
+            'xi-api-key': `${elevenLabsApiKey}`, // Set the API key in the headers.
+          },
+          // data: {
+          //   audio: base64AudioData, // Pass in the inputText as the text to be converted to speech.
+          // },
+          data:form,
+          responseType: 'arraybuffer', // Set the responseType to arraybuffer to receive binary data as response.
+        };
+      
+        // Send the API request using Axios and wait for the response.
+        const speechDetails = await axios.request(options);
+      
+        // Return the binary audio data received from the API response.
+        console.log('done..1')
+        // console.log(speechDetails.data)
+        
+        const audioBuffer = speechDetails.data;
+
+        const newAudioUrl = await justUploadAudio(audioBuffer, storage,`text2Speech${Date.now()}`)
+        console.log('newAudioUrl...:', newAudioUrl)
+
+
+
+
+         // send fb media message ie: message of the dynamic picture generated!
+    await messenger.sendFbMessage(BigInt(IGId), {
+      type: 'media',
+      mediaType: 'audio', //image,audio,video
+      // filetypes--- Audio: acc, m4a, wav, mp4 Max(25MB) Image: png, jpeg, gif Max(8MB) Video: 	mp4, ogg, avi, mov, webm Max(25MB)
+      url: newAudioUrl
+      // text: newAudioUrl
+      })
+
+      // messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
+      console.log('message sent!')
+
+
+
+
+      }
     }
     
   }
