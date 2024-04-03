@@ -1,5 +1,5 @@
 const axios = require('axios');
-const {kcAssetBot} = require('./kcAssetBot');
+const {AltAppsBot} = require('./AltAppsBot');
 
 const sendPluseClientId = process.env.SEND_PULSE_CLIENT_ID;
 const sendPulseClientSecret = process.env.SEND_PULSE_CLIENT_SECRET;
@@ -53,12 +53,12 @@ const sendpulsewebhook = async (redis,req, res) => {
     }
   }
 
-  const setContactChannelId = async (contactsId,channellId) => {
+  const setContactSendPulseVariableByName = async (contactsId,variableName, variableValue) => {
     try {
       const response = await axios.post('https://api.sendpulse.com/instagram/contacts/setVariable', {
         contact_id: contactsId,
-        variable_name:'channellId',
-        variable_value: channellId  
+        variable_name:variableName,
+        variable_value: variableValue  
       }, 
       {
         headers: {
@@ -140,14 +140,14 @@ const sendpulsewebhook = async (redis,req, res) => {
   console.log("message :", message)
 
   const botIds = {
-    kcAssetsIgBot: '65a566d55041e08ef9006ce5',
+    AltAppsIgBot: '65a566d55041e08ef9006ce5',
   }
 
-  if (message.bot.id == botIds.kcAssetsIgBot){
+  if (message.bot.id == botIds.AltAppsIgBot){
     // media message has been received, handle the message type, then determine the use case of the media, then send follow up based on the usecase
   
-    (userVariables.channellId === '' || userVariables.channellId !== contactsChannelData.id) && await setContactChannelId(contactId, contactsChannelData.id)
-    await kcAssetBot(message, accessToken)
+    (userVariables.channellId === '' || userVariables.channellId !== contactsChannelData.id) && await setContactSendPulseVariableByName(contactId, 'channellId', contactsChannelData.id)
+    await AltAppsBot(message, accessToken,setContactSendPulseVariableByName)
   }
 
      
