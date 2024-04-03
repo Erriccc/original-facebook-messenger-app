@@ -212,7 +212,8 @@ const AltAppsBot = async (message, sendPulseAccessToken, setContactSendPulseVari
     }
     else if (message.userVariables.current_mini_app == 'voice_changer') {
             // confirm ther is an attachment and the attachment is an audio and the user wants to convert speech to speech audio
-            if (message.attachmentType && message.attachmentType == 'audio' && message.userVariables.speech2SpeechReq === 'true'){
+            if (message.attachmentType && message.attachmentType == 'audio'){
+              // if (message.attachmentType && message.attachmentType == 'audio' && message.userVariables.speech2SpeechReq === 'true'){
               const voiceModel =  (message.userVariables.voiceModel === 'Tamara'? 'ZOtTHD5HJflREhTbZ7sc' :'H1JjD7OHmS3KIOu5PDkI')
 
               const audioContent = await axios.get(message.attachment.url, { responseType: 'arraybuffer' })
