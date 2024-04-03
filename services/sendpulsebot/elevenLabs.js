@@ -8,8 +8,8 @@ const { justUploadAudio, justUploadImage, uploadImage, upsertUser,  createSwipe,
 
   const fbAccessToken = process.env.KCASSETS_INSTAGRAM_ACCESS_TOKEN; 
     const pageId = process.env.KCASSETS_INSTAGRAM_PAGE_ID
-    const flowId = '65ba0b35310fc3cef108b641'
-    // const flowId = '65aaffafbe3d70f3e401e33d'
+    const mathAiFlowId = '65ba0b35310fc3cef108b641'
+    const voiceChangerFlowId = '660ca1e71314c66b6c0913f2'
 
 const sendPluseClientId = process.env.SEND_PULSE_CLIENT_ID;
 const sendPulseClientSecret = process.env.SEND_PULSE_CLIENT_SECRET;
@@ -90,7 +90,7 @@ const elevenLabsApiKey = process.env.ELEVEN_LABS_API_KEY
       // text: newAudioUrl
       })
 
-      // messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
+      // messenger.sendFlowToContact(sendPulseContactId,mathAiFlowId,{followUp:'@mathAi'})
       console.log('message sent!')
 
         res.status(200).json(
@@ -243,7 +243,7 @@ const elevenLabsApiKey = process.env.ELEVEN_LABS_API_KEY
         // text: newAudioUrl
         })
 
-        // messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
+        // messenger.sendFlowToContact(sendPulseContactId,mathAiFlowId,{followUp:'@mathAi'})
         console.log('message sent!')
 
           res.status(200).json(
@@ -381,7 +381,9 @@ const elevenLabsApiKey = process.env.ELEVEN_LABS_API_KEY
         // text: newAudioUrl
         })
 
-        // messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
+        // messenger.sendFlowToContact(sendPulseContactId,mathAiFlowId,{followUp:'@mathAi'})
+        messenger.sendFlowToContact(sendPulseContactId,voiceChangerFlowId)
+
         console.log('message sent!')
 
           res.status(200).json(

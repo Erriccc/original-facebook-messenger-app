@@ -23,8 +23,8 @@ const AltAppsBot = async (message, sendPulseAccessToken, setContactSendPulseVari
     const sendPulseContactId = message.contact.sendPulseId;
     const fbAccessToken = process.env.KCASSETS_INSTAGRAM_ACCESS_TOKEN; 
     const pageId = process.env.KCASSETS_INSTAGRAM_PAGE_ID
-    const flowId = '65ba0b35310fc3cef108b641'
-    // const flowId = '65aaffafbe3d70f3e401e33d'
+    const mathAiFlowId = '65ba0b35310fc3cef108b641'
+    const voiceChangerFlowId = '660ca1e71314c66b6c0913f2'
     const elevenLabsApiKey = process.env.ELEVEN_LABS_API_KEY
 
     const messenger = new Messenger(fbAccessToken, pageId, sendPulseAccessToken);
@@ -99,7 +99,7 @@ const AltAppsBot = async (message, sendPulseAccessToken, setContactSendPulseVari
                 })
 
                 // use sendpulse to send a flow of messages to the user
-                messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
+                messenger.sendFlowToContact(sendPulseContactId,mathAiFlowId,{followUp:'@mathAi'})
                 console.log('message sent!')
                 await setContactSendPulseVariableByName(sendPulseContactId,'mathSolverImage' ,imageUrl )
                 }
@@ -160,7 +160,7 @@ const AltAppsBot = async (message, sendPulseAccessToken, setContactSendPulseVari
                   })
 
                 // use sendpulse to send a flow of messages to the user
-                  messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
+                  messenger.sendFlowToContact(sendPulseContactId,mathAiFlowId,{followUp:'@mathAi'})
                   console.log('message sent!')
                 }
     }
@@ -260,7 +260,7 @@ const AltAppsBot = async (message, sendPulseAccessToken, setContactSendPulseVari
             // text: newAudioUrl
             })
 
-            // messenger.sendFlowToContact(sendPulseContactId,flowId,{followUp:'@mathAi'})
+            messenger.sendFlowToContact(sendPulseContactId,voiceChangerFlowId)
             await setContactSendPulseVariableByName(sendPulseContactId,'speech2SpeechReq' ,'false' )
 
             console.log('message sent! and variable set')
