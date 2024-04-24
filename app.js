@@ -175,7 +175,8 @@ app.get("/webhook", (req, res) => {
       let body = req.body;
 
       console.log(`\u{1F7EA} Received webhook:`);
-      console.dir(body, { depth: null });
+      // console.dir(body, { depth: null });
+      console.log(body.entry && body.entry[0] && body.entry[0].messaging[0].message ? body.entry[0].messaging[0] : body);
 
       // Check if this is an event from a page subscription
       if (body.object === "page") {
