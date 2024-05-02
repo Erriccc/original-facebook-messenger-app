@@ -5,7 +5,6 @@ const express = require("express"),
   path = require("path"),
   config = require("./services/config"),
   app = express();
-  const xhub = require('express-x-hub');
   const axios = require('axios');
   const { createClient } = require('@supabase/supabase-js')
   const {redisClient} = require('./redis.js')
@@ -36,15 +35,6 @@ const supabaseUrl = process.env.SUPABASE_URL
  const supabaseKey = process.env.SUPABASE_KEY
 const supabase = createClient(supabaseUrl, supabaseKey)
 const storage = supabase.storage
-
-// webhook setup
-
-const token = process.env.VERIFY_TOKEN || 'token';
-const received_updates = [];
-app.use(xhub({ algorithm: 'sha1', secret: process.env.APP_SECRET }));
-
-
-
 
 var users = {};
 // Parse application/x-www-form-urlencoded
@@ -77,48 +67,9 @@ function sendTwilioMessage(twilioClient, to_address, message) {
 // Respond with index file when a GET request is made to the homepage
 app.get("/", function (_req, res) {
   console.log('index /GET coming through')
-  // res.render("index");
-  // console.log(_req);
-  res.send('<pre>' + JSON.stringify(received_updates, null, 2) + '</pre>');
+  res.render("index");
 
 });
-
-app.get(['/facebook', '/instagram'], function(req, res) {
-  if (
-    req.query['hub.mode'] == 'subscribe' &&
-    req.query['hub.verify_token'] == token
-  ) {
-    res.send(req.query['hub.challenge']);
-  } else {
-    res.sendStatus(400);
-  }
-});
-
-app.post('/facebook', function(req, res) {
-  console.log('Facebook request body:', req.body);
-
-  if (!req.isXHubValid()) {
-    console.log('Warning - request header X-Hub-Signature not present or invalid');
-    res.sendStatus(401);
-    return;
-  }
-
-  console.log('request header X-Hub-Signature validated');
-  // Process the Facebook updates here
-  received_updates.unshift(req.body);
-  res.sendStatus(200);
-});
-
-app.post('/instagram', function(req, res) {
-  console.log('Instagram request body:');
-  console.log(req.body);
-  // Process the Instagram updates here
-  received_updates.unshift(req.body);
-  res.sendStatus(200);
-});
-
-
-
 // Add support for GET requests to our webhook
 app.get("/webhook", (req, res) => {
   console.log('get webhook')
